@@ -321,7 +321,8 @@ module.exports = grammar(C, {
     constructor_or_destructor_definition: $ => seq(
       repeat(choice(
         $.storage_class_specifier,
-        $.type_qualifier
+        $.type_qualifier,
+        $.attribute_specifier
       )),
       prec(1, seq(
         optional($.virtual_function_specifier),

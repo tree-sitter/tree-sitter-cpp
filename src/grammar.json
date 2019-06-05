@@ -878,6 +878,10 @@
               {
                 "type": "SYMBOL",
                 "name": "type_qualifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "attribute_specifier"
               }
             ]
           }
@@ -898,6 +902,10 @@
               {
                 "type": "SYMBOL",
                 "name": "type_qualifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "attribute_specifier"
               }
             ]
           }
@@ -929,6 +937,32 @@
             {
               "type": "SYMBOL",
               "name": "declaration_list"
+            }
+          ]
+        }
+      ]
+    },
+    "attribute_specifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "__attribute__"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "argument_list"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
             }
           ]
         }
@@ -1344,6 +1378,13 @@
               {
                 "type": "SYMBOL",
                 "name": "parameter_list"
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "attribute_specifier"
+                }
               }
             ]
           }
@@ -1810,10 +1851,6 @@
             {
               "type": "STRING",
               "value": "const"
-            },
-            {
-              "type": "STRING",
-              "value": "restrict"
             },
             {
               "type": "STRING",
@@ -5781,6 +5818,10 @@
               {
                 "type": "SYMBOL",
                 "name": "type_qualifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "attribute_specifier"
               }
             ]
           }
