@@ -1854,6 +1854,10 @@
             },
             {
               "type": "STRING",
+              "value": "restrict"
+            },
+            {
+              "type": "STRING",
               "value": "volatile"
             },
             {
@@ -2778,6 +2782,10 @@
         {
           "type": "SYMBOL",
           "name": "try_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "throw_statement"
         }
       ]
     },
@@ -6448,6 +6456,31 @@
         {
           "type": "SYMBOL",
           "name": "_declarator"
+        }
+      ]
+    },
+    "throw_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "throw"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_expression"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
         }
       ]
     },

@@ -488,7 +488,8 @@ module.exports = grammar(C, {
     _statement: ($, original) => choice(
       original,
       $.for_range_loop,
-      $.try_statement
+      $.try_statement,
+      $.throw_statement,
     ),
 
     if_statement: $ => prec.right(seq(
@@ -524,6 +525,12 @@ module.exports = grammar(C, {
         $.initializer_list,
         ';'
       )
+    ),
+
+    throw_statement: $ => seq(
+      'throw',
+      optional($._expression),
+      ';'
     ),
 
     try_statement: $ => seq(
