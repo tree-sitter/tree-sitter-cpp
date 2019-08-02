@@ -1351,6 +1351,10 @@
             "named": false
           },
           {
+            "type": "scoped_type_identifier",
+            "named": true
+          },
+          {
             "type": "sized_type_specifier",
             "named": true
           },
@@ -1374,6 +1378,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "scoped_type_identifier",
+            "named": true
+          },
           {
             "type": "type_identifier",
             "named": true
@@ -4259,11 +4267,15 @@
     "named": false
   },
   {
-    "type": ":",
+    "type": "class",
     "named": false
   },
   {
     "type": "struct",
+    "named": false
+  },
+  {
+    "type": ":",
     "named": false
   },
   {
@@ -4505,10 +4517,6 @@
   {
     "type": "comment",
     "named": true
-  },
-  {
-    "type": "class",
-    "named": false
   },
   {
     "type": "final",
