@@ -80,6 +80,12 @@ T f() {
     return t;
 }
 
+void f() {
+  if (const int x = foo()) { }
+  if (const int x { foo() }) { }
+  if (const int x = foo(); x != 0) { }
+}
+
 ---
 
 (translation_unit
@@ -99,7 +105,28 @@ T f() {
             (type_descriptor type: (type_identifier)))))
         consequence: (return_statement
           (pointer_expression argument: (identifier)))
-        alternative: (return_statement (identifier))))))
+        alternative: (return_statement (identifier)))))
+  (function_definition
+    type: (primitive_type)
+    declarator: (function_declarator
+      declarator: (identifier)
+      parameters: (parameter_list))
+    body: (compound_statement
+      (if_statement
+        condition: (condition_declaration
+          (type_qualifier) type: (primitive_type)
+          declarator: (identifier) default_value: (call_expression function: (identifier) arguments: (argument_list)))
+        consequence: (compound_statement))
+      (if_statement
+        condition: (condition_declaration
+          (type_qualifier) type: (primitive_type)
+          declarator: (identifier) (initializer_list (call_expression function: (identifier) arguments: (argument_list))))
+        consequence: (compound_statement))
+      (if_statement
+        condition: (init_statement
+          initializer: (declaration (type_qualifier) type: (primitive_type) declarator: (init_declarator declarator: (identifier) value: (call_expression function: (identifier) arguments: (argument_list))))
+          condition: (binary_expression left: (identifier) right: (number_literal)))
+        consequence: (compound_statement)))))
 
 ===========================================
 Try/catch statements
