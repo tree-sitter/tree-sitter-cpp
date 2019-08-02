@@ -1342,6 +1342,24 @@
     "type": "enum_specifier",
     "named": true,
     "fields": {
+      "base": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "sized_type_specifier",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
       "body": {
         "multiple": false,
         "required": false,
@@ -4241,15 +4259,15 @@
     "named": false
   },
   {
+    "type": ":",
+    "named": false
+  },
+  {
     "type": "struct",
     "named": false
   },
   {
     "type": "union",
-    "named": false
-  },
-  {
-    "type": ":",
     "named": false
   },
   {
