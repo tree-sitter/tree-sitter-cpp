@@ -1,4 +1,4 @@
-const C = require("../tree-sitter-c/grammar")
+const C = require("tree-sitter-c/grammar")
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
