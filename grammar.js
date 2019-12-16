@@ -1,4 +1,4 @@
-const C = require("tree-sitter-c/grammar")
+const C = require("../tree-sitter-c/grammar")
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
@@ -781,6 +781,11 @@ module.exports = grammar(C, {
 
     this: $ => 'this',
     nullptr: $ => 'nullptr',
+
+    concatenated_string: $ => seq(
+      choice($.raw_string_literal, $.string_literal),
+      repeat1(choice($.raw_string_literal, $.string_literal))
+    ),
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier),
 
