@@ -1,4 +1,4 @@
-const C = require("tree-sitter-c/grammar")
+const C = require("../tree-sitter-c/grammar")
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
@@ -754,6 +754,11 @@ module.exports = grammar(C, {
       ))),
       '::',
       field('name', $._namespace_identifier)
+    )),
+
+    _assignment_left_expression: ($, original) => prec.right(PREC.ASSIGNMENT, choice(
+      original,
+      $.scoped_namespace_identifier,
     )),
 
     operator_name: $ => token(seq(
