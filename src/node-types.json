@@ -660,6 +660,10 @@
             "named": true
           },
           {
+            "type": "scoped_namespace_identifier",
+            "named": true
+          },
+          {
             "type": "subscript_expression",
             "named": true
           }
@@ -4747,6 +4751,14 @@
     "named": false
   },
   {
+    "type": "U\"",
+    "named": false
+  },
+  {
+    "type": "U'",
+    "named": false
+  },
+  {
     "type": "[",
     "named": false
   },
@@ -5024,6 +5036,22 @@
   },
   {
     "type": "typename",
+    "named": false
+  },
+  {
+    "type": "u\"",
+    "named": false
+  },
+  {
+    "type": "u'",
+    "named": false
+  },
+  {
+    "type": "u8\"",
+    "named": false
+  },
+  {
+    "type": "u8'",
     "named": false
   },
   {
