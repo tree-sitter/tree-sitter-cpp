@@ -756,10 +756,10 @@ module.exports = grammar(C, {
       field('name', $._namespace_identifier)
     )),
 
-    _assignment_left_expression: ($, original) => prec.right(PREC.ASSIGNMENT, choice(
+    _assignment_left_expression: ($, original) => choice(
       original,
       $.scoped_namespace_identifier,
-    )),
+    ),
 
     operator_name: $ => token(seq(
       'operator',
