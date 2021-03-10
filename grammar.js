@@ -4,6 +4,7 @@ const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
   NEW: C.PREC.CALL + 1,
   STRUCTURED_BINDING: -1,
+  THREE_WAY: C.PREC.RELATIONAL + 1
 })
 
 module.exports = grammar(C, {
@@ -810,7 +811,7 @@ module.exports = grammar(C, {
       '...'
     ),
 
-    sizeof_expression: ($, original) => choice(
+    sizeof_expression: ($, original) => prec.right(PREC.SIZEOF, choice(
       original,
       seq(
         'sizeof', '...',
@@ -818,6 +819,15 @@ module.exports = grammar(C, {
         field('value', $.identifier),
         ')'
       ),
+    )),
+
+    binary_expression: ($, original) => choice(
+      original,
+      prec.left(PREC.THREE_WAY, seq(
+        field('left', $._expression),
+        field('operator', '<=>'),
+        field('right', $._expression)
+      ))
     ),
 
     argument_list: $ => seq(
@@ -902,6 +912,7 @@ module.exports = grammar(C, {
         '+=', '-=', '*=', '/=', '%=', '^=', '&=', '|=',
         '<<', '>>', '>>=', '<<=',
         '==', '!=', '<=', '>=',
+        '<=>',
         '&&', '||',
         '++', '--',
         ',',
