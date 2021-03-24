@@ -10164,6 +10164,10 @@
             "value": "operator"
           },
           {
+            "type": "PATTERN",
+            "value": "\\s*"
+          },
+          {
             "type": "CHOICE",
             "members": [
               {
@@ -10317,6 +10321,40 @@
               {
                 "type": "STRING",
                 "value": "[]"
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "new"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "delete"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "\\s*"
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "[]"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
