@@ -198,6 +198,10 @@
       {
         "type": "update_expression",
         "named": true
+      },
+      {
+        "type": "user_defined_literal",
+        "named": true
       }
     ]
   },
@@ -4870,6 +4874,38 @@
           {
             "type": "--",
             "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "user_defined_literal",
+    "named": true,
+    "fields": {
+      "literal": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "concatenated_string",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "raw_string_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
           }
         ]
       }

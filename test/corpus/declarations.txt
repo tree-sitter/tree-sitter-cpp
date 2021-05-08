@@ -443,8 +443,8 @@ inline int g();
 Operator overload declarations
 =========================================
 
-ostream &operator<<(ostream &, const A &a);
-
+ostream &operator <<(ostream &, const A &a);
+Foo operator "" _foo(const char* s);
 bool A::operator!=(const A &other) const;
 
 ---
@@ -458,6 +458,12 @@ bool A::operator!=(const A &other) const;
         (parameter_list
           (parameter_declaration (type_identifier) (abstract_reference_declarator))
           (parameter_declaration (type_qualifier) (type_identifier) (reference_declarator (identifier)))))))
+  (declaration
+    (type_identifier)
+    (function_declarator
+      (operator_name)
+      (parameter_list
+        (parameter_declaration (type_qualifier) (primitive_type) (pointer_declarator (identifier))))))
   (declaration
     (primitive_type)
     (function_declarator

@@ -4879,6 +4879,10 @@
         {
           "type": "SYMBOL",
           "name": "raw_string_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "user_defined_literal"
         }
       ]
     },
@@ -10219,6 +10223,10 @@
             "value": "operator"
           },
           {
+            "type": "PATTERN",
+            "value": "\\s*"
+          },
+          {
             "type": "CHOICE",
             "members": [
               {
@@ -10372,6 +10380,35 @@
               {
                 "type": "STRING",
                 "value": "[]"
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "\"\""
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "\\s*"
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "_"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "[a-zA-Z_]\\w*"
+                  }
+                ]
               }
             ]
           }
@@ -10385,6 +10422,55 @@
     "nullptr": {
       "type": "STRING",
       "value": "nullptr"
+    },
+    "user_defined_literal": {
+      "type": "PREC",
+      "value": 17,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "literal",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "number_literal"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "char_literal"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "string_literal"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "raw_string_literal"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "concatenated_string"
+                }
+              ]
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "suffix",
+            "content": {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "[a-zA-Z_]\\w*"
+              }
+            }
+          }
+        ]
+      }
     },
     "_namespace_identifier": {
       "type": "ALIAS",

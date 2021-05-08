@@ -2,6 +2,7 @@ const C = require("tree-sitter-c/grammar")
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
+  USER_DEFINED_LITERAL: C.PREC.SUBSCRIPT + 1,
   NEW: C.PREC.CALL + 1,
   STRUCTURED_BINDING: -1,
 })
@@ -745,7 +746,8 @@ module.exports = grammar(C, {
       $.parameter_pack_expansion,
       $.nullptr,
       $.this,
-      $.raw_string_literal
+      $.raw_string_literal,
+      $.user_defined_literal
     ),
 
     call_expression: ($, original) => choice(original, seq(
@@ -909,6 +911,7 @@ module.exports = grammar(C, {
 
     operator_name: $ => token(seq(
       'operator',
+      /\s*/,
       choice(
         '+', '-', '*', '/', '%',
         '^', '&', '|', '~',
@@ -921,7 +924,8 @@ module.exports = grammar(C, {
         ',',
         '->*',
         '->',
-        '()', '[]'
+        '()', '[]',
+        seq('""', /\s*/, optional('_'), /[a-zA-Z_]\w*/),
       )
     )),
 
@@ -932,6 +936,17 @@ module.exports = grammar(C, {
       choice($.raw_string_literal, $.string_literal),
       repeat1(choice($.raw_string_literal, $.string_literal))
     ),
+
+    user_defined_literal: $ => prec(PREC.USER_DEFINED_LITERAL, seq(
+      field('literal', choice(
+        $.number_literal,
+        $.char_literal,
+        $.string_literal,
+        $.raw_string_literal,
+        $.concatenated_string
+      )),
+      field('suffix', token.immediate(/[a-zA-Z_]\w*/))
+    )),
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier)
   }
