@@ -10645,7 +10645,7 @@
       "type": "STRING",
       "value": "nullptr"
     },
-    "ud_suffix": {
+    "literal_suffix": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
@@ -10682,7 +10682,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "ud_suffix"
+          "name": "literal_suffix"
         }
       ]
     },

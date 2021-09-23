@@ -5246,6 +5246,10 @@
           "named": true
         },
         {
+          "type": "literal_suffix",
+          "named": true
+        },
+        {
           "type": "number_literal",
           "named": true
         },
@@ -5255,10 +5259,6 @@
         },
         {
           "type": "string_literal",
-          "named": true
-        },
-        {
-          "type": "ud_suffix",
           "named": true
         }
       ]
@@ -5830,6 +5830,10 @@
     "named": false
   },
   {
+    "type": "literal_suffix",
+    "named": true
+  },
+  {
     "type": "long",
     "named": false
   },
@@ -6012,10 +6016,6 @@
   {
     "type": "u8'",
     "named": false
-  },
-  {
-    "type": "ud_suffix",
-    "named": true
   },
   {
     "type": "union",

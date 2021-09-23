@@ -639,11 +639,11 @@ User-defined literals
   (expression_statement
     (user_defined_literal
 	  (number_literal)
-	  (ud_suffix)))
+	  (literal_suffix)))
   (expression_statement
     (user_defined_literal
       (concatenated_string (string_literal) (string_literal))
-	  (ud_suffix))))
+	  (literal_suffix))))
 
 ====================================================
 Primitive types ctor

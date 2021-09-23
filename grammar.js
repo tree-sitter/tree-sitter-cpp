@@ -950,7 +950,7 @@ module.exports = grammar(C, {
       repeat1(choice($.raw_string_literal, $.string_literal))
     ),
 
-	ud_suffix: $ => token.immediate(/[a-zA-Z_]\w*/),
+	literal_suffix: $ => token.immediate(/[a-zA-Z_]\w*/),
 
     user_defined_literal: $ => seq(
       choice(
@@ -960,7 +960,7 @@ module.exports = grammar(C, {
         $.raw_string_literal,
         $.concatenated_string
       ),
-      $.ud_suffix
+      $.literal_suffix
     ),
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier)
