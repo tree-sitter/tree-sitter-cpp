@@ -473,9 +473,9 @@ int f() { }
 Operator overload declarations
 =========================================
 
-ostream &operator <<(ostream &, const A &a);
+ostream &operator<<(ostream &, const A &a);
 Foo operator "" _foo(const char* s);
-std::string_view operator "" s_v(const char* s);
+std::string_view operator ""s_v(const char* s);
 bool A::operator!=(const A &other) const;
 
 bool A::operator ==(const A &other) const;
