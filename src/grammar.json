@@ -10645,48 +10645,44 @@
       "type": "STRING",
       "value": "nullptr"
     },
+    "ud_suffix": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[a-zA-Z_]\\w*"
+      }
+    },
     "user_defined_literal": {
       "type": "SEQ",
       "members": [
         {
-          "type": "FIELD",
-          "name": "literal",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "number_literal"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "char_literal"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "string_literal"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "raw_string_literal"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "concatenated_string"
-              }
-            ]
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "number_literal"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "char_literal"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "string_literal"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "raw_string_literal"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "concatenated_string"
+            }
+          ]
         },
         {
-          "type": "FIELD",
-          "name": "suffix",
-          "content": {
-            "type": "IMMEDIATE_TOKEN",
-            "content": {
-              "type": "PATTERN",
-              "value": "[a-zA-Z_]\\w*"
-            }
-          }
+          "type": "SYMBOL",
+          "name": "ud_suffix"
         }
       ]
     },

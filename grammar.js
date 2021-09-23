@@ -950,15 +950,17 @@ module.exports = grammar(C, {
       repeat1(choice($.raw_string_literal, $.string_literal))
     ),
 
+	ud_suffix: $ => token.immediate(/[a-zA-Z_]\w*/),
+
     user_defined_literal: $ => seq(
-      field('literal', choice(
+      choice(
         $.number_literal,
         $.char_literal,
         $.string_literal,
         $.raw_string_literal,
         $.concatenated_string
-      )),
-      field('suffix', token.immediate(/[a-zA-Z_]\w*/))
+      ),
+      $.ud_suffix
     ),
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier)

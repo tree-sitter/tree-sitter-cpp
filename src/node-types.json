@@ -5232,33 +5232,36 @@
   {
     "type": "user_defined_literal",
     "named": true,
-    "fields": {
-      "literal": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "char_literal",
-            "named": true
-          },
-          {
-            "type": "concatenated_string",
-            "named": true
-          },
-          {
-            "type": "number_literal",
-            "named": true
-          },
-          {
-            "type": "raw_string_literal",
-            "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      }
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "char_literal",
+          "named": true
+        },
+        {
+          "type": "concatenated_string",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "raw_string_literal",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "ud_suffix",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -6009,6 +6012,10 @@
   {
     "type": "u8'",
     "named": false
+  },
+  {
+    "type": "ud_suffix",
+    "named": true
   },
   {
     "type": "union",

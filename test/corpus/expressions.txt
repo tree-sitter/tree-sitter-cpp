@@ -638,10 +638,12 @@ User-defined literals
 (translation_unit
   (expression_statement
     (user_defined_literal
-      literal: (number_literal)))
+	  (number_literal)
+	  (ud_suffix)))
   (expression_statement
     (user_defined_literal
-      literal: (concatenated_string (string_literal) (string_literal)))))
+      (concatenated_string (string_literal) (string_literal))
+	  (ud_suffix))))
 
 ====================================================
 Primitive types ctor
