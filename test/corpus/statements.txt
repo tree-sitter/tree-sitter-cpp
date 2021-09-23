@@ -283,3 +283,95 @@ a::b::c = 1;
         (scoped_namespace_identifier (namespace_identifier) (namespace_identifier))
         (namespace_identifier))
       (number_literal))))
+
+=========================================
+Attributes
+=========================================
+
+void f() {
+  [[a]] switch (b) {
+   [[c]] case 1: {}
+  }
+  [[a]] while (true) {}
+  [[a]] if (true) {}
+  [[a]] for (auto x : y) {}
+  [[a]] for (;;) {}
+  [[a]] return;
+  [[a]] a;
+  [[a]];
+  [[a]] label: {}
+  [[a]] goto label;
+}
+
+---
+
+(translation_unit
+  (function_definition (primitive_type)
+    (function_declarator (identifier) (parameter_list))
+    (compound_statement
+      (attributed_statement (attribute_declaration (attribute (identifier)))
+        (switch_statement
+          (condition_clause (identifier))
+          (compound_statement
+            (attributed_statement (attribute_declaration (attribute (identifier)))
+              (case_statement (number_literal) (compound_statement))))))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (while_statement (condition_clause (true)) (compound_statement)))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (if_statement (condition_clause (true)) (compound_statement)))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (for_range_loop (auto) (identifier) (identifier) (compound_statement)))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (for_statement (compound_statement)))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (return_statement))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (expression_statement (identifier)))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (expression_statement))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (labeled_statement (statement_identifier) (compound_statement)))
+      (attributed_statement (attribute_declaration (attribute (identifier))) (goto_statement (statement_identifier))))))
+
+===========================================
+Coroutines
+===========================================
+
+co_return 1;
+co_return;
+co_yield 1;
+
+---
+
+(translation_unit
+  (co_return_statement
+    (number_literal))
+  (co_return_statement)
+  (co_yield_statement
+    (number_literal)))
+
+
+===========================================
+Switch statements
+===========================================
+
+void foo(int a) {
+  switch (a) {
+    case 1:
+      for (auto i : vec) {}
+    case 2:
+      try {
+        // do something
+      } catch(...) {}
+      throw 1;
+    case 3:
+      co_return;
+    default:
+      co_yield a;
+  }
+}
+
+---
+
+(translation_unit
+  (function_definition (primitive_type)
+    (function_declarator (identifier) (parameter_list (parameter_declaration (primitive_type) (identifier))))
+    (compound_statement
+      (switch_statement (condition_clause (identifier))
+        (compound_statement
+          (case_statement (number_literal) (for_range_loop (auto) (identifier) (identifier) (compound_statement)))
+          (case_statement (number_literal) (try_statement (compound_statement (comment)) (catch_clause (parameter_list) (compound_statement))) (throw_statement (number_literal)))
+          (case_statement (number_literal) (co_return_statement))
+          (case_statement (co_yield_statement (identifier))))))))
