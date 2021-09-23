@@ -2,7 +2,6 @@ const C = require("tree-sitter-c/grammar")
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
-  USER_DEFINED_LITERAL: C.PREC.SUBSCRIPT + 1,
   NEW: C.PREC.CALL + 1,
   STRUCTURED_BINDING: -1,
 })
@@ -951,7 +950,7 @@ module.exports = grammar(C, {
       repeat1(choice($.raw_string_literal, $.string_literal))
     ),
 
-    user_defined_literal: $ => prec(PREC.USER_DEFINED_LITERAL, seq(
+    user_defined_literal: $ => seq(
       field('literal', choice(
         $.number_literal,
         $.char_literal,
@@ -960,7 +959,7 @@ module.exports = grammar(C, {
         $.concatenated_string
       )),
       field('suffix', token.immediate(/[a-zA-Z_]\w*/))
-    )),
+    ),
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier)
   }
