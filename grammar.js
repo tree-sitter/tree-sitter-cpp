@@ -909,9 +909,8 @@ module.exports = grammar(C, {
       $.scoped_namespace_identifier,
     ),
 
-    operator_name: $ => token(seq(
+    operator_name: $ => prec(1, seq(
       'operator',
-      /\s*/,
       choice(
         '+', '-', '*', '/', '%',
         '^', '&', '|', '~',
@@ -925,9 +924,9 @@ module.exports = grammar(C, {
         '->*',
         '->',
         '()', '[]',
-        seq('""', /\s*/, optional('_'), /[a-zA-Z_]\w*/),
-      )
-    )),
+        seq('""', $.identifier)
+	  )
+	)),
 
     this: $ => 'this',
     nullptr: $ => 'nullptr',

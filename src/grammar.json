@@ -10214,17 +10214,14 @@
       }
     },
     "operator_name": {
-      "type": "TOKEN",
+      "type": "PREC",
+      "value": 1,
       "content": {
         "type": "SEQ",
         "members": [
           {
             "type": "STRING",
             "value": "operator"
-          },
-          {
-            "type": "PATTERN",
-            "value": "\\s*"
           },
           {
             "type": "CHOICE",
@@ -10389,24 +10386,8 @@
                     "value": "\"\""
                   },
                   {
-                    "type": "PATTERN",
-                    "value": "\\s*"
-                  },
-                  {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": "_"
-                      },
-                      {
-                        "type": "BLANK"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "[a-zA-Z_]\\w*"
+                    "type": "SYMBOL",
+                    "name": "identifier"
                   }
                 ]
               }
