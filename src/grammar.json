@@ -4343,6 +4343,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "mandatory_parameter_declaration"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "optional_parameter_declaration"
                     },
                     {
@@ -4370,6 +4374,10 @@
                           {
                             "type": "SYMBOL",
                             "name": "parameter_declaration"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "mandatory_parameter_declaration"
                           },
                           {
                             "type": "SYMBOL",
@@ -8413,6 +8421,67 @@
           ]
         }
       ]
+    },
+    "mandatory_parameter_declaration": {
+      "type": "PREC",
+      "value": -2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_declaration_modifiers"
+                }
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "type",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_type_specifier"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_declaration_modifiers"
+                }
+              }
+            ]
+          },
+          {
+            "type": "FIELD",
+            "name": "declarator",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_declarator"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_abstract_declarator"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "optional_parameter_declaration": {
       "type": "SEQ",

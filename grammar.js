@@ -291,10 +291,23 @@ module.exports = grammar(C, {
       )
     ),
 
+    mandatory_parameter_declaration: $ => prec(-2,seq(
+      seq(
+        repeat($._declaration_modifiers),
+        optional(field('type', $._type_specifier)),
+        repeat($._declaration_modifiers),
+      ),
+      field('declarator', choice(
+        $._declarator,
+        $._abstract_declarator
+      ))
+    )),
+
     parameter_list: $ => seq(
       '(',
       commaSep(choice(
         $.parameter_declaration,
+        $.mandatory_parameter_declaration,
         $.optional_parameter_declaration,
         $.variadic_parameter_declaration,
         '...'
