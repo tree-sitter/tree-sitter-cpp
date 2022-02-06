@@ -314,8 +314,8 @@ module.exports = grammar(C, {
               )),
               // It is technically legal to skip the comma here, but that means there is a hard conflict between
               // a variadic template type pack expansion parameter that is unnamed, and a normal type parameter
-              // that is unnamed followed by the ellipsis for a variadic function. Since skipping the comma is for
-              // compatability with pre standard code
+              // that is unnamed followed by the ellipsis for a variadic function. Since allowing no the comma is
+              // for compatability with pre standard code, hopefully its ok to not support it in this grammar.
               //
               // eg:
               //  This is a template function declaration with unnamed parameters declared through pack expansion
