@@ -233,7 +233,7 @@ T f(T);
           (type_parameter_declaration
             (type_identifier)))
         (requires_clause
-          (requirement_conjunction
+          (constraint_conjunction
             (template_type
               (type_identifier)
               (template_argument_list
@@ -257,7 +257,7 @@ T f(T);
           (type_parameter_declaration
             (type_identifier)))
         (requires_clause
-          (requirement_disjunction
+          (constraint_disjunction
             (template_type
               (type_identifier)
               (template_argument_list
@@ -281,7 +281,7 @@ T f(T);
           (type_parameter_declaration
             (type_identifier)))
         (requires_clause
-          (requirement_disjunction
+          (constraint_disjunction
             (false)
             (true)))
         (comment)

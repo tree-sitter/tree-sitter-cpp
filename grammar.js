@@ -304,32 +304,14 @@ module.exports = grammar(C, {
     ),
 
     parameter_list: $ => seq(
-        '(',
-        choice(
-            seq(
-              commaSep(choice(
-                $.parameter_declaration,
-                $.optional_parameter_declaration,
-                $.variadic_parameter_declaration,
-              )),
-              // It is technically legal to skip the comma here, but that means there is a hard conflict between
-              // a variadic template type pack expansion parameter that is unnamed, and a normal type parameter
-              // that is unnamed followed by the ellipsis for a variadic function. Since allowing no the comma is
-              // for compatability with pre standard code, hopefully its ok to not support it in this grammar.
-              //
-              // eg:
-              //  This is a template function declaration with unnamed parameters declared through pack expansion
-              //                template<typename... Ts> void (Ts...) {}
-              //
-              //  This is variadic function declaration with an unnamed first parameter of type Ts, and then a variable
-              //  amount of subsequent parameters
-              //                void (Ts...) {}
-
-              optional(seq(',', '...'))
-            ),
-            '...'
-        ),
-        ')'
+      '(',
+      commaSep(choice(
+        $.parameter_declaration,
+        $.optional_parameter_declaration,
+        $.variadic_parameter_declaration,
+        '...'
+      )),
+      ')'
     ),
 
     optional_parameter_declaration: $ => seq(
@@ -905,20 +887,20 @@ module.exports = grammar(C, {
 
     requirement_seq: $ => seq('{', repeat($._requirement), '}'),
 
-    requirement_conjunction: $ => prec.left(PREC.LOGICAL_AND, seq(
+    constraint_conjunction: $ => prec.left(PREC.LOGICAL_AND, seq(
       field('left', $._requirement_clause_constraint),
       field('operator', '&&'),
       field('right', $._requirement_clause_constraint))
     ),
 
-    requirement_disjunction: $ => prec.left(PREC.LOGICAL_OR, seq(
+    constraint_disjunction: $ => prec.left(PREC.LOGICAL_OR, seq(
       field('left', $._requirement_clause_constraint),
       field('operator', '||'),
       field('right', $._requirement_clause_constraint))
     ),
 
     _requirement_clause_constraint: $ => choice(
-      // "Primary Expressions"
+      // Primary expressions"
       $.true,
       $.false,
       $._class_name,
@@ -926,12 +908,12 @@ module.exports = grammar(C, {
       $.lambda_expression,
       $.requires_expression,
 
-      // Paranethesized expressions
+      // Parenthesized expressions
       seq('(', $._expression, ')'),
 
       // conjunction or disjunction of the above
-      $.requirement_conjunction,
-      $.requirement_disjunction,
+      $.constraint_conjunction,
+      $.constraint_disjunction,
     ),
 
     requires_clause: $ => seq(
@@ -981,11 +963,23 @@ module.exports = grammar(C, {
     lambda_default_capture: $ => choice('=', '&'),
 
     _fold_operator: $ => choice(...FOLD_OPERATORS),
-    _binary_fold_operator: $ => choice(...FOLD_OPERATORS.map(operator => seq(operator, '...', operator))),
+    _binary_fold_operator: $ => choice(...FOLD_OPERATORS.map(operator => seq(field('operator', operator), '...', operator))),
 
-    _unary_right_fold: $ => seq('...', $._fold_operator, $._expression),
-    _unary_left_fold: $ => seq($._expression, $._fold_operator, '...'),
-    _binary_fold: $ => seq($._expression, $._binary_fold_operator, $._expression),
+    _unary_left_fold: $ => seq(
+      field('left', '...'),
+      field('operator', $._fold_operator),
+      field('right', $._expression)
+    ),
+    _unary_right_fold: $ => seq(
+      field('left', $._expression),
+      field('operator', $._fold_operator),
+      field('right', '...')
+    ),
+    _binary_fold: $ => seq(
+      field('left', $._expression),
+      $._binary_fold_operator,
+      field('right', $._expression)
+    ),
 
     fold_expression: $ => seq(
       '(',
