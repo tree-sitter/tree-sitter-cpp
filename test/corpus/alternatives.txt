@@ -1,0 +1,21 @@
+==============================================================
+Alternative tokens and or not
+==============================================================
+
+if (not marked and (x < left or right < x)) {
+
+}
+
+---
+
+(translation_unit
+  (if_statement
+    (condition_clause
+      (alternative_binary
+        (alternative_unary (identifier))
+        (parenthesized_expression
+          (alternative_binary
+            (binary_expression (identifier) (identifier))
+            (binary_expression (identifier) (identifier))))))
+    (compound_statement)))
+
