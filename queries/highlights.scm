@@ -72,3 +72,11 @@
 ; Strings
 
 (raw_string_literal) @string
+
+; Operators
+
+[
+ "and"
+ "or"
+ "not"
+] @operator
