@@ -817,6 +817,8 @@ module.exports = grammar(C, {
       $.this,
       $.raw_string_literal,
       $.user_defined_literal,
+      $.alternative_unary,
+      $.alternative_binary,
       $.fold_expression
     ),
 
@@ -1145,6 +1147,25 @@ module.exports = grammar(C, {
       ),
       $.literal_suffix
     ),
+
+    alternative_unary: $ => prec.left(PREC.UNARY, seq(
+      field('operator', 'not'),
+      field('argument', $._expression)
+    )),
+
+    alternative_binary: $ => {
+      const table = [
+        ['or',  PREC.LOGICAL_OR],
+        ['and', PREC.LOGICAL_AND],
+      ];
+      return choice(...table.map(([operator, precedence]) => {
+        return prec.left(precedence, seq(
+          field('left', $._expression),
+          field('operator', operator),
+          field('right', $._expression)
+        ))
+      }));
+    },
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier)
   }

@@ -84,6 +84,14 @@
     "named": true,
     "subtypes": [
       {
+        "type": "alternative_binary",
+        "named": true
+      },
+      {
+        "type": "alternative_unary",
+        "named": true
+      },
+      {
         "type": "assignment_expression",
         "named": true
       },
@@ -607,6 +615,72 @@
           {
             "type": "type_descriptor",
             "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "alternative_binary",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "and",
+            "named": false
+          },
+          {
+            "type": "or",
+            "named": false
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "alternative_unary",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "not",
+            "named": false
           }
         ]
       }
@@ -6358,6 +6432,10 @@
     "named": false
   },
   {
+    "type": "and",
+    "named": false
+  },
+  {
     "type": "auto",
     "named": true
   },
@@ -6534,6 +6612,10 @@
     "named": false
   },
   {
+    "type": "not",
+    "named": false
+  },
+  {
     "type": "null",
     "named": true
   },
@@ -6547,6 +6629,10 @@
   },
   {
     "type": "operator",
+    "named": false
+  },
+  {
+    "type": "or",
     "named": false
   },
   {
