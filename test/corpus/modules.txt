@@ -1,0 +1,121 @@
+=========================================
+Module fragments
+=========================================
+
+module;
+module :private;
+
+---
+
+(translation_unit
+  (module_fragment_declaration)
+  (module_fragment_declaration (access_specifier))
+)
+
+=========================================
+Module declaration
+=========================================
+
+export module A;
+module B;
+export module A.B.C;
+module A.B.C:D;
+export module A.B.C:D [[foo, bar::bazz(0, "spam", eggs)]];
+
+---
+
+(translation_unit
+  (module_declaration
+    (export_specifier)
+    (module_qualified_name (module_name)))
+
+  (module_declaration
+    (module_qualified_name (module_name)))
+
+  (module_declaration
+    (export_specifier)
+    (module_qualified_name
+      (module_name)
+      (module_name)
+      (module_name)))
+
+  (module_declaration
+    (module_qualified_name
+      (module_name)
+      (module_name)
+      (module_name))
+    (module_partition (module_name)))
+
+  (module_declaration
+    (export_specifier)
+    (module_qualified_name
+      (module_name)
+      (module_name)
+      (module_name))
+    (module_partition (module_name))
+    (attribute_declaration
+      (attribute (identifier))
+      (attribute
+        (identifier)
+        (identifier)
+        (argument_list
+          (number_literal)
+          (string_literal)
+	  (identifier))))))
+
+
+=========================================
+Import declaration
+=========================================
+
+export import some_module;
+import :A;
+import <string> [[some::attribute]];
+import EXPANDED_MACRO;
+import EXPANDED_FUNCTION_MACRO(string);
+
+---
+(translation_unit
+  (import_declaration
+    (export_specifier)
+    (module_qualified_name (module_name)))
+  (import_declaration
+    (module_partition (module_name)))
+  (import_declaration
+    (system_lib_string)
+    (attribute_declaration
+      (attribute (identifier) (identifier))))
+  (import_declaration
+    (module_qualified_name (module_name)))
+  (import_declaration
+    (call_expression
+      (identifier)
+      (argument_list (identifier)))))
+
+
+=========================================
+Export block
+=========================================
+
+export {
+  int a;
+  void foo() {}
+  struct bar{};
+}
+
+---
+(translation_unit
+  (export_block
+    (declaration_list
+      (declaration
+        (primitive_type)
+        (identifier))
+      (function_definition
+        (primitive_type)
+        (function_declarator
+          (identifier)
+          (parameter_list))
+        (compound_statement))
+      (struct_specifier
+        (type_identifier)
+        (field_declaration_list)))))

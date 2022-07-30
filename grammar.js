@@ -70,6 +70,10 @@ module.exports = grammar(C, {
       alias($.constructor_or_destructor_definition, $.function_definition),
       alias($.operator_cast_definition, $.function_definition),
       alias($.operator_cast_declaration, $.declaration),
+      $.module_declaration,
+      $.module_fragment_declaration,
+      $.import_declaration,
+      $.export_block,
     ),
 
     // Types
@@ -236,6 +240,55 @@ module.exports = grammar(C, {
     ))),
 
     // Declarations
+
+    module_access_specifier: $ => seq(':', 'private'),
+    module_fragment_declaration: $ => seq(
+      'module',
+      optional(alias($.module_access_specifier, $.access_specifier)),
+      ';'
+    ),
+
+    export_specifier: $ => 'export',
+
+    _module_name: $ => alias($.identifier, $.module_name),
+    _module_name_qualifier: $ => repeat1(seq($._module_name, '.')),
+    module_qualified_name: $ => seq(
+      optional($._module_name_qualifier),
+      $._module_name
+    ),
+
+    module_partition: $ => seq(':', $._module_name),
+
+    module_declaration: $ => seq(
+      optional($.export_specifier),
+      'module',
+      $.module_qualified_name,
+      optional($.module_partition),
+      optional($.attribute_declaration),
+      ';'
+    ),
+
+    import_declaration: $ => seq(
+      optional($.export_specifier),
+      'import',
+      field('name', choice(
+        $.module_qualified_name,
+        $.module_partition,
+        $.string_literal,
+        $.system_lib_string,
+        // can't distinguish between a module name and a preprocessor macro
+        // assume module name as it's more common
+        // $.identifier,
+        alias($.preproc_call_expression, $.call_expression)
+      )),
+      optional($.attribute_declaration),
+      ';'
+    ),
+
+    export_block: $ => seq(
+      'export',
+      field('body', $.declaration_list)
+    ),
 
     template_declaration: $ => seq(
       'template',
