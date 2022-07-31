@@ -50,6 +50,7 @@ module.exports = grammar(C, {
     [$._binary_fold_operator, $._fold_operator],
     [$.expression_statement, $.for_statement],
     [$.init_statement, $.for_statement],
+    [$.storage_class_specifier, $.template_instantiation],
   ]),
 
   inline: ($, original) => original.concat([
@@ -310,9 +311,23 @@ module.exports = grammar(C, {
     ),
 
     template_instantiation: $ => seq(
+      optional(alias('extern', $.storage_class_specifier)),
       'template',
       optional($._declaration_specifiers),
-      field('declarator', $._declarator),
+      field('declarator', choice(
+        $._declarator,
+        seq(
+          choice(
+            'enum',
+            'enum class',
+            'enum struct',
+            'struct',
+            'class',
+            'union'
+          ),
+          $.template_type
+        )
+      )),
       ';'
     ),
 

@@ -8361,6 +8361,23 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "STRING",
+                "value": "extern"
+              },
+              "named": true,
+              "value": "storage_class_specifier"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "STRING",
           "value": "template"
         },
@@ -8380,8 +8397,51 @@
           "type": "FIELD",
           "name": "declarator",
           "content": {
-            "type": "SYMBOL",
-            "name": "_declarator"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_declarator"
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "enum"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "enum class"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "enum struct"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "struct"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "class"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "union"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "template_type"
+                  }
+                ]
+              }
+            ]
           }
         },
         {
@@ -13170,6 +13230,10 @@
     [
       "init_statement",
       "for_statement"
+    ],
+    [
+      "storage_class_specifier",
+      "template_instantiation"
     ]
   ],
   "precedences": [],

@@ -5655,12 +5655,40 @@
     "named": true,
     "fields": {
       "declarator": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
             "type": "_declarator",
             "named": true
+          },
+          {
+            "type": "class",
+            "named": false
+          },
+          {
+            "type": "enum",
+            "named": false
+          },
+          {
+            "type": "enum class",
+            "named": false
+          },
+          {
+            "type": "enum struct",
+            "named": false
+          },
+          {
+            "type": "struct",
+            "named": false
+          },
+          {
+            "type": "template_type",
+            "named": true
+          },
+          {
+            "type": "union",
+            "named": false
           }
         ]
       },
@@ -6866,6 +6894,14 @@
   },
   {
     "type": "enum",
+    "named": false
+  },
+  {
+    "type": "enum class",
+    "named": false
+  },
+  {
+    "type": "enum struct",
     "named": false
   },
   {
