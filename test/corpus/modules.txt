@@ -119,3 +119,270 @@ export {
       (struct_specifier
         (type_identifier)
         (field_declaration_list)))))
+
+=========================================
+Exported declarations
+=========================================
+
+export extern volatile int const * kSomeHardwareRegister;
+export extern void func();
+export struct S;
+export class T;
+export enum E;
+export union U;
+export int a = 3;
+export const auto b = SomeType{2};
+
+---
+(translation_unit
+  (declaration 
+    (export_specifier)
+    (storage_class_specifier)
+    (type_qualifier)
+    (primitive_type)
+    (type_qualifier)
+    (pointer_declarator (identifier)))
+
+  (declaration
+    (export_specifier)
+    (storage_class_specifier)
+    (primitive_type)
+    (function_declarator
+      (identifier)
+          (parameter_list)))
+
+  (struct_specifier
+    (export_specifier)
+    (type_identifier))
+
+  (class_specifier
+    (export_specifier)
+    (type_identifier))
+
+  (enum_specifier
+    (export_specifier)
+    (type_identifier))
+
+  (union_specifier
+    (export_specifier)
+    (type_identifier))
+
+  (declaration
+    (export_specifier)
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (number_literal)))
+
+  (declaration
+    (export_specifier)
+    (type_qualifier)
+    (placeholder_type_specifier (auto))
+    (init_declarator
+      (identifier)
+      (compound_literal_expression
+        (type_identifier)
+        (initializer_list
+          (number_literal))))))
+
+=========================================
+Exported definitions
+=========================================
+
+export extern "C" {}
+export [[noreturn]] void on_error() { }
+export namespace lib::linux_impl {}
+export struct T{};
+export class T{};
+export enum E {};
+export union U {};
+
+---
+
+(translation_unit
+  (linkage_specification
+    (export_specifier)
+    (string_literal)
+    (declaration_list))
+
+  (function_definition
+    (export_specifier)
+    (attribute_declaration
+      (attribute
+        (identifier)))
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list))
+    (compound_statement))
+
+  (namespace_definition
+    (export_specifier)
+    (namespace_definition_name
+      (identifier)
+      (identifier))
+    (declaration_list))
+
+  (struct_specifier
+    (export_specifier)
+    (type_identifier)
+    (field_declaration_list))
+
+  (class_specifier
+    (export_specifier)
+    (type_identifier)
+    (field_declaration_list))
+
+  (enum_specifier
+    (export_specifier)
+    (type_identifier)
+    (enumerator_list))
+
+  (union_specifier
+    (export_specifier)
+    (type_identifier)
+    (field_declaration_list)))
+
+
+=========================================
+Exported aliases
+=========================================
+
+export typedef std::string String;
+export namespace lib = lib::linux_impl;
+export using std::terminate;
+export using lib_write_register = lib::write_register;
+
+---
+
+(translation_unit
+  (type_definition
+    (export_specifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (type_identifier))
+    (type_identifier))
+
+  (namespace_alias_definition
+    (export_specifier)
+    (identifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (identifier)))
+
+  (using_declaration
+    (export_specifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (identifier)))
+
+  (alias_declaration
+    (export_specifier)
+    (type_identifier)
+    (type_descriptor
+      (qualified_identifier
+        (namespace_identifier)
+        (type_identifier)))))
+
+
+=========================================
+Exported template declarations
+=========================================
+
+export template <class T>
+void function(T parameter);
+
+export template <class T>
+void function(T parameter) {}
+
+export template <class T>
+class A {};
+
+export template <class T>
+union A {};
+
+export template <class T>
+inline constexpr T pi = 3.1415926535;
+
+export template <class T, class ... U>
+concept IsAnyOf = (std::same_as<T> || ... );
+
+---
+(translation_unit
+
+  (template_declaration
+    (export_specifier)
+    (template_parameter_list
+      (type_parameter_declaration (type_identifier)))
+    (declaration
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list
+          (parameter_declaration
+            (type_identifier)
+            (identifier))))))
+
+  (template_declaration
+    (export_specifier)
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (function_definition
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list
+          (parameter_declaration
+            (type_identifier)
+            (identifier))))
+      (compound_statement)))
+
+  (template_declaration
+    (export_specifier)
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (class_specifier
+      (type_identifier)
+      (field_declaration_list)))
+
+  (template_declaration
+    (export_specifier)
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+      (union_specifier
+        (type_identifier)
+        (field_declaration_list)))
+
+  (template_declaration
+    (export_specifier)
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (declaration
+      (storage_class_specifier)
+      (type_qualifier)
+      (type_identifier)
+      (init_declarator
+        (identifier)
+        (number_literal))))
+
+  (template_declaration
+    (export_specifier)
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier))
+      (variadic_type_parameter_declaration
+        (type_identifier)))
+    (concept_definition
+      (identifier)
+      (fold_expression
+        (qualified_identifier
+          (namespace_identifier)
+          (template_function
+            (identifier)
+            (template_argument_list
+              (type_descriptor
+                (type_identifier)))))))))
