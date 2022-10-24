@@ -206,7 +206,7 @@ module.exports = grammar(C, {
     base_class_clause: $ => seq(
       ':',
       commaSep1(seq(
-        optional(choice('public', 'private', 'protected')),
+        repeat(choice('public', 'private', 'protected', 'virtual')),
         $._class_name,
         optional('...')
       ))

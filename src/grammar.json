@@ -8147,29 +8147,28 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "STRING",
-                          "value": "public"
-                        },
-                        {
-                          "type": "STRING",
-                          "value": "private"
-                        },
-                        {
-                          "type": "STRING",
-                          "value": "protected"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "BLANK"
-                    }
-                  ]
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "public"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "private"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "protected"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "virtual"
+                      }
+                    ]
+                  }
                 },
                 {
                   "type": "SYMBOL",
@@ -8202,29 +8201,28 @@
                     "type": "SEQ",
                     "members": [
                       {
-                        "type": "CHOICE",
-                        "members": [
-                          {
-                            "type": "CHOICE",
-                            "members": [
-                              {
-                                "type": "STRING",
-                                "value": "public"
-                              },
-                              {
-                                "type": "STRING",
-                                "value": "private"
-                              },
-                              {
-                                "type": "STRING",
-                                "value": "protected"
-                              }
-                            ]
-                          },
-                          {
-                            "type": "BLANK"
-                          }
-                        ]
+                        "type": "REPEAT",
+                        "content": {
+                          "type": "CHOICE",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "public"
+                            },
+                            {
+                              "type": "STRING",
+                              "value": "private"
+                            },
+                            {
+                              "type": "STRING",
+                              "value": "protected"
+                            },
+                            {
+                              "type": "STRING",
+                              "value": "virtual"
+                            }
+                          ]
+                        }
                       },
                       {
                         "type": "SYMBOL",

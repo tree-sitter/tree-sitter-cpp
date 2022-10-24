@@ -354,6 +354,9 @@ class A : public B {
 class C : C::D, public E {
 };
 
+class F : virtual A, public virtual B, virtual public C {
+};
+
 ---
 
 (translation_unit
@@ -365,6 +368,13 @@ class C : C::D, public E {
     (type_identifier)
     (base_class_clause
       (qualified_identifier (namespace_identifier) (type_identifier))
+      (type_identifier))
+    (field_declaration_list))
+  (class_specifier
+    (type_identifier)
+    (base_class_clause
+      (type_identifier)
+      (type_identifier)
       (type_identifier))
     (field_declaration_list)))
 
