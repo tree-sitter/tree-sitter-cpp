@@ -15,7 +15,7 @@ enum TokenType {
 };
 
 // The spec limits delimiters to 16 chars, enforce this to bound serialization.
-constexpr unsigned RAW_STRING_DELIMITER_MAX = 16;
+const unsigned RAW_STRING_DELIMITER_MAX = 16;
 
 struct Scanner {
   // Last raw_string_delimiter, used to detect when raw_string_content ends.
@@ -27,8 +27,8 @@ struct Scanner {
       // Closing delimiter: must exactly match the opening delimiter.
       // We already checked this when scanning content, but this is how we know
       // when to stop. We can't stop at ", because R"""hello""" is valid.
-      for (auto c : delimiter) {
-        if (lexer->lookahead != c)
+      for (int i = 0; i < delimiter.size(); ++i) {
+        if (lexer->lookahead != delimiter[i])
           return false;
         lexer->advance(lexer, false);
       }
@@ -125,9 +125,11 @@ bool tree_sitter_cpp_external_scanner_scan(void *payload, TSLexer *lexer,
 }
 
 unsigned tree_sitter_cpp_external_scanner_serialize(void *payload, char *buffer) {
-  static_assert(
-    RAW_STRING_DELIMITER_MAX * sizeof(wchar_t) < TREE_SITTER_SERIALIZATION_BUFFER_SIZE,
-    "Raw string delimiters may not be serializable!");
+#if __cpp_static_assert >= 200410L
+  static_assert(RAW_STRING_DELIMITER_MAX * sizeof(wchar_t) <
+                    TREE_SITTER_SERIALIZATION_BUFFER_SIZE,
+                "Raw string delimiters may not be serializable!");
+#endif
 
   Scanner *scanner = static_cast<Scanner *>(payload);
   size_t size = scanner->delimiter.size() * sizeof(wchar_t);
