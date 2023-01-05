@@ -27,7 +27,7 @@ struct Scanner {
       // Closing delimiter: must exactly match the opening delimiter.
       // We already checked this when scanning content, but this is how we know
       // when to stop. We can't stop at ", because R"""hello""" is valid.
-      for (int i = 0; i < delimiter.size(); ++i) {
+      for (std::size_t i = 0; i < delimiter.size(); ++i) {
         if (lexer->lookahead != delimiter[i])
           return false;
         lexer->advance(lexer, false);
