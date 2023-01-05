@@ -52,7 +52,7 @@ struct Scanner {
     }
   }
 
-  // Scan the raw string content in R"delimeter(content)delimiter".
+  // Scan the raw string content in R"delimiter(content)delimiter".
   bool scan_raw_string_content(TSLexer *lexer) {
     // The progress made through the delimiter since the last ')'.
     // The delimiter may not contain ')' so a single counter suffices.
