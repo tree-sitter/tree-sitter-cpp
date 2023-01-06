@@ -94,6 +94,16 @@ struct Scanner {
   
 
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
+    // After parse error, lexer is called with all valid_symbols true.
+    // There's no other context where both raw content and delimiter are valid.
+    bool error_recovery = valid_symbols[RAW_STRING_CONTENT] &&
+                          valid_symbols[RAW_STRING_DELIMITER];
+
+    // We don't want to recover from an error by e.g. interpreting the rest of
+    // the file as a raw string!
+    // See https://github.com/tree-sitter/tree-sitter/issues/285
+    if (error_recovery) return false;
+
     // No skipping leading whitespace: raw-string grammar is space-sensitive.
 
     if (valid_symbols[RAW_STRING_CONTENT]) {
