@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.18)
-project(tree-sitter-cpp LANGUAGES CXX)
+project(tree-sitter-cpp LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 20)
 set(SONAME_MAJOR 0)
 set(SONAME_MINOR 0)
 
@@ -11,8 +12,10 @@ add_library(tree-sitter-cpp SHARED
         src/parser.c
         src/scanner.cc
         )
+# This is a 
+#SET_SOURCE_FILES_PROPERTIES(src/parser.c PROPERTIES LANGUAGE CXX)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
 # We don't add `-std=gnu99` here as CMake sets this automatically for GNU-compatible compilers.
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
