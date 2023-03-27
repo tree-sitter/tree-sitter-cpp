@@ -12,8 +12,6 @@ add_library(tree-sitter-cpp SHARED
         src/parser.c
         src/scanner.cc
         )
-# This is a 
-#SET_SOURCE_FILES_PROPERTIES(src/parser.c PROPERTIES LANGUAGE CXX)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
 # We don't add `-std=gnu99` here as CMake sets this automatically for GNU-compatible compilers.
