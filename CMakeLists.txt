@@ -17,9 +17,16 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
 # We don't add `-std=gnu99` here as CMake sets this automatically for GNU-compatible compilers.
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
-# Don't add the `lib` prefix on Windows.
+# Strip the binary
+set_target_properties(tree-sitter-cpp PROPERTIES LINK_FLAGS_RELEASE "-s")
+
 if(WIN32)
+    # Don't add the `lib` prefix on Windows.
     set_target_properties(tree-sitter-cpp PROPERTIES PREFIX "")
+
+    # Link statically against `libstdc++.dll` and `libgcc_s.dll` on Windows.
+    # We add `-static` here so that `libwinpthread-1.dll` is not linked, either.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -static -static-libstdc++ -static-libgcc")
 endif()
 
 if(APPLE)
