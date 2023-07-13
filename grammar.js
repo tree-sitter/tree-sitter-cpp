@@ -10,7 +10,7 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const C = require('tree-sitter-c/grammar');
+const C = require("../tree-sitter-c/grammar")
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
@@ -420,7 +420,7 @@ module.exports = grammar(C, {
       $._declaration_specifiers,
       field('declarator', $._field_declarator),
       choice(
-        field('body', choice($.compound_statement, $.try_statement)),
+        field('body', choice($.compound_statement, $.try_statement, $.SEH_try_statement)),
         $.default_method_clause,
         $.delete_method_clause,
       ),
@@ -437,7 +437,7 @@ module.exports = grammar(C, {
         $.operator_cast,
         alias($.qualified_operator_cast_identifier, $.qualified_identifier),
       )),
-      field('body', choice($.compound_statement, $.try_statement)),
+      field('body', choice($.compound_statement, $.try_statement, $.SEH_try_statement)),
     ),
 
     operator_cast_declaration: $ => prec(1, seq(
