@@ -136,10 +136,6 @@
         "named": true
       },
       {
-        "type": "fold_expression",
-        "named": true
-      },
-      {
         "type": "generic_expression",
         "named": true
       },
@@ -866,6 +862,10 @@
         "types": [
           {
             "type": "_expression",
+            "named": true
+          },
+          {
+            "type": "fold_expression",
             "named": true
           },
           {
@@ -1832,6 +1832,10 @@
             "named": true
           },
           {
+            "type": "fold_expression",
+            "named": true
+          },
+          {
             "type": "template_type",
             "named": true
           },
@@ -1880,6 +1884,10 @@
             "named": true
           },
           {
+            "type": "fold_expression",
+            "named": true
+          },
+          {
             "type": "template_type",
             "named": true
           },
@@ -1917,6 +1925,10 @@
           },
           {
             "type": "constraint_disjunction",
+            "named": true
+          },
+          {
+            "type": "fold_expression",
             "named": true
           },
           {
@@ -1965,6 +1977,10 @@
           },
           {
             "type": "constraint_disjunction",
+            "named": true
+          },
+          {
+            "type": "fold_expression",
             "named": true
           },
           {
@@ -3569,6 +3585,10 @@
           },
           {
             "type": "argument_list",
+            "named": true
+          },
+          {
+            "type": "fold_expression",
             "named": true
           },
           {
@@ -5532,6 +5552,10 @@
             "named": true
           },
           {
+            "type": "fold_expression",
+            "named": true
+          },
+          {
             "type": "template_type",
             "named": true
           },
@@ -5583,6 +5607,10 @@
         },
         {
           "type": "comma_expression",
+          "named": true
+        },
+        {
+          "type": "fold_expression",
           "named": true
         },
         {

@@ -3459,6 +3459,10 @@
                   {
                     "type": "SYMBOL",
                     "name": "_expression"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "fold_expression"
                   }
                 ]
               }
@@ -5046,60 +5050,41 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "STRING",
+          "value": "return"
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
+              "type": "CHOICE",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "return"
+                  "type": "SYMBOL",
+                  "name": "_expression"
                 },
                 {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "_expression"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "comma_expression"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "BLANK"
-                    }
-                  ]
-                },
-                {
-                  "type": "STRING",
-                  "value": ";"
-                }
-              ]
-            },
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "return"
+                  "type": "SYMBOL",
+                  "name": "comma_expression"
                 },
                 {
                   "type": "SYMBOL",
                   "name": "initializer_list"
                 },
                 {
-                  "type": "STRING",
-                  "value": ";"
+                  "type": "SYMBOL",
+                  "name": "fold_expression"
                 }
               ]
+            },
+            {
+              "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
         }
       ]
     },
@@ -5314,10 +5299,6 @@
         {
           "type": "SYMBOL",
           "name": "user_defined_literal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "fold_expression"
         }
       ]
     },
@@ -5530,6 +5511,10 @@
                 {
                   "type": "SYMBOL",
                   "name": "_expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "fold_expression"
                 },
                 {
                   "type": "SYMBOL",
