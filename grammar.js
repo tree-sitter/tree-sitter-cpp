@@ -378,8 +378,12 @@ module.exports = grammar(C, {
       $.variadic_declarator,
     ),
 
-    init_declarator: ($, original) => choice(
-      original,
+    init_declarator: $ => choice(
+      seq(
+        field('declarator', $._declarator),
+        '=',
+        field('value', choice($.initializer_list, $._expression, $.fold_expression)),
+      ),
       seq(
         field('declarator', $._declarator),
         field('value', choice(
@@ -803,11 +807,10 @@ module.exports = grammar(C, {
       ),
     ),
 
-    return_statement: ($, original) => seq(
-      choice(
-        original,
-        seq('return', $.initializer_list, ';'),
-      ),
+    return_statement: $ => seq(
+      'return',
+      optional(choice($._expression, $.comma_expression, $.initializer_list, $.fold_expression)),
+      ';',
     ),
 
     co_return_statement: $ => seq(
@@ -857,7 +860,6 @@ module.exports = grammar(C, {
       $.this,
       $.raw_string_literal,
       $.user_defined_literal,
-      $.fold_expression,
     ),
 
     raw_string_literal: $ => seq(
@@ -1208,7 +1210,7 @@ module.exports = grammar(C, {
         'or_eq',
         'xor_eq',
       )),
-      field('right', choice($._expression, $.initializer_list)),
+      field('right', choice($._expression, $.fold_expression, $.initializer_list)),
     )),
 
 
