@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-cpp",
-  "version": "0.20.0",
+  "version": "0.20.3",
   "description": "C++ grammar for tree-sitter",
   "main": "bindings/node",
   "keywords": [
@@ -14,13 +14,17 @@
   "author": "Max Brunsfeld",
   "license": "MIT",
   "dependencies": {
-    "nan": "^2.14.0"
+    "nan": "^2.17.0"
   },
   "devDependencies": {
-    "tree-sitter-c": "^0.20.2",
-    "tree-sitter-cli": "^0.20.0"
+    "eslint": "^8.47.0",
+    "eslint-config-google": "^0.14.0",
+    "tree-sitter-c": "^0.20.6",
+    "tree-sitter-cli": "^0.20.8"
   },
   "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "lint": "eslint grammar.js",
     "test": "tree-sitter test && tree-sitter parse examples/* --quiet --time",
     "test-windows": "tree-sitter test"
   },
@@ -30,7 +34,9 @@
       "file-types": [
         "cc",
         "cpp",
+        "cxx",
         "hpp",
+        "hxx",
         "h"
       ],
       "highlights": [

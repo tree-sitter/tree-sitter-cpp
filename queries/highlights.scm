@@ -34,7 +34,7 @@
 ; Constants
 
 (this) @variable.builtin
-(nullptr) @constant
+(null "nullptr" @constant)
 
 ; Keywords
 
@@ -60,7 +60,6 @@
  "protected"
  "public"
  "template"
- "this"
  "throw"
  "try"
  "typename"
