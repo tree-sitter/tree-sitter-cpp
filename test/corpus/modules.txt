@@ -218,9 +218,9 @@ export union U {};
 
   (namespace_definition
     (export_specifier)
-    (namespace_definition_name
-      (identifier)
-      (identifier))
+    (nested_namespace_specifier
+      (namespace_identifier)
+      (namespace_identifier))
     (declaration_list))
 
   (struct_specifier
@@ -265,10 +265,10 @@ export using lib_write_register = lib::write_register;
 
   (namespace_alias_definition
     (export_specifier)
-    (identifier)
-    (qualified_identifier
+    (namespace_identifier)
+    (nested_namespace_specifier
       (namespace_identifier)
-      (identifier)))
+      (namespace_identifier)))
 
   (using_declaration
     (export_specifier)
