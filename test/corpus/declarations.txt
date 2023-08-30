@@ -1414,7 +1414,13 @@ template class A<int>;
           (primitive_type)
           (abstract_pointer_declarator))
         (parameter_declaration
-          (primitive_type))))))
+          (primitive_type)))))
+  (template_instantiation
+    (template_type 
+      (type_identifier)
+      (template_argument_list
+        (type_descriptor
+	  (primitive_type))))))
 
 ================================================================================
 Structured binding declarations

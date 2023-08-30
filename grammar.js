@@ -101,6 +101,10 @@ module.exports = grammar(C, {
       alias($.constructor_or_destructor_definition, $.function_definition),
       alias($.operator_cast_definition, $.function_definition),
       alias($.operator_cast_declaration, $.declaration),
+      $.module_declaration,
+      $.module_fragment_declaration,
+      $.import_declaration,
+      $.export_block,
     ),
 
     _block_item: ($, original) => choice(
@@ -116,9 +120,6 @@ module.exports = grammar(C, {
       alias($.constructor_or_destructor_definition, $.function_definition),
       alias($.operator_cast_definition, $.function_definition),
       alias($.operator_cast_declaration, $.declaration),
-      $.module_declaration,
-      $.module_fragment_declaration,
-      $.import_declaration,
       $.export_block,
     ),
 
@@ -220,10 +221,10 @@ module.exports = grammar(C, {
       {
         ...original,
         members: original.members.map(
-          (e) => e.name !== 'body'
-            ? e
-            : field('body', choice(e.content, $.try_statement)))
-      }
+          (e) => e.name !== 'body' ?
+            e :
+            field('body', choice(e.content, $.try_statement))),
+      },
     ),
 
     virtual_specifier: _ => choice(
@@ -311,7 +312,7 @@ module.exports = grammar(C, {
     module_fragment_declaration: $ => seq(
       'module',
       optional(alias($.module_access_specifier, $.access_specifier)),
-      ';'
+      ';',
     ),
 
     // NB: this is a C++20 specifier from the Modules TS, not the pre-C++11 one
@@ -321,7 +322,7 @@ module.exports = grammar(C, {
     _module_name_qualifier: $ => repeat1(seq($._module_name, '.')),
     module_qualified_name: $ => seq(
       optional($._module_name_qualifier),
-      $._module_name
+      $._module_name,
     ),
 
     module_partition: $ => seq(':', $._module_name),
@@ -332,7 +333,7 @@ module.exports = grammar(C, {
       $.module_qualified_name,
       optional($.module_partition),
       optional($.attribute_declaration),
-      ';'
+      ';',
     ),
 
     import_declaration: $ => seq(
@@ -346,15 +347,15 @@ module.exports = grammar(C, {
         // can't distinguish between a module name and a preprocessor macro
         // assume module name as it's more common
         // $.identifier,
-        alias($.preproc_call_expression, $.call_expression)
+        alias($.preproc_call_expression, $.call_expression),
       )),
       optional($.attribute_declaration),
-      ';'
+      ';',
     ),
 
     export_block: $ => seq(
       'export',
-      field('body', $.declaration_list)
+      field('body', $.declaration_list),
     ),
 
     // repeat exportable C definitions
@@ -398,7 +399,22 @@ module.exports = grammar(C, {
       optional(alias('extern', $.storage_class_specifier)),
       'template',
       optional($._declaration_specifiers),
-      field('declarator', $._declarator),
+      field('declarator',
+        choice(
+          $._declarator,
+          seq(
+            choice(
+              'enum',
+              'enum class',
+              'enum struct',
+              'struct',
+              'class',
+              'union',
+            ),
+            $.template_type,
+          ),
+        ),
+      ),
       ';',
     ),
 

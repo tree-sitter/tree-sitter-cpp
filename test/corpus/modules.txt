@@ -60,7 +60,7 @@ export module A.B.C:D [[foo, bar::bazz(0, "spam", eggs)]];
         (identifier)
         (argument_list
           (number_literal)
-          (string_literal)
+          (string_literal (string_content))
 	  (identifier))))))
 
 
@@ -202,7 +202,7 @@ export union U {};
 (translation_unit
   (linkage_specification
     (export_specifier)
-    (string_literal)
+    (string_literal (string_content))
     (declaration_list))
 
   (function_definition
