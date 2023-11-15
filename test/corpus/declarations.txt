@@ -1393,6 +1393,7 @@ Explicit template instantiations
 ================================================================================
 
 template A<int, bool>::A(char *, size_t);
+template class A<int>;
 
 --------------------------------------------------------------------------------
 
@@ -1413,7 +1414,13 @@ template A<int, bool>::A(char *, size_t);
           (primitive_type)
           (abstract_pointer_declarator))
         (parameter_declaration
-          (primitive_type))))))
+          (primitive_type)))))
+  (template_instantiation
+    (template_type 
+      (type_identifier)
+      (template_argument_list
+        (type_descriptor
+	  (primitive_type))))))
 
 ================================================================================
 Structured binding declarations
