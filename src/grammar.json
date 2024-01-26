@@ -9154,8 +9154,13 @@
               "value": "("
             },
             {
-              "type": "SYMBOL",
-              "name": "assignment_expression_lhs_expression"
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "assignment_expression_lhs_expression"
+              },
+              "named": true,
+              "value": "assignment_expression"
             },
             {
               "type": "STRING",

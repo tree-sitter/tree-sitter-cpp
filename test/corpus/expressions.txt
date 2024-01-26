@@ -1478,7 +1478,7 @@ while ((a = b)) {}
   (while_statement
     (condition_clause
       (parenthesized_expression
-        (assignment_expression_lhs_expression
+        (assignment_expression
           (identifier)
           (identifier))))
     (compound_statement)))
@@ -1505,7 +1505,7 @@ int main() {
       (if_statement
         (condition_clause
           (parenthesized_expression
-            (assignment_expression_lhs_expression
+            (assignment_expression
               (identifier)
               (binary_expression
                 (identifier)
@@ -1514,7 +1514,7 @@ int main() {
           (expression_statement
             (assignment_expression
               (parenthesized_expression
-                (assignment_expression_lhs_expression
+                (assignment_expression
                   (identifier)
                   (number_literal)))
               (number_literal))))))))

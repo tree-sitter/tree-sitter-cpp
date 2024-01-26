@@ -1256,7 +1256,7 @@ module.exports = grammar(C, {
     // and assignment expressions within parentheses.
     parenthesized_expression: ($, original) => choice(
       original,
-      seq('(', $.assignment_expression_lhs_expression, ')')
+      seq('(', alias($.assignment_expression_lhs_expression, $.assignment_expression), ')')
     ),
 
     operator_name: $ => prec(1, seq(
