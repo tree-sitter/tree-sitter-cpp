@@ -98,13 +98,13 @@ static bool scan_raw_string_content(Scanner *scanner, TSLexer *lexer) {
 }
 
 void *tree_sitter_cpp_external_scanner_create() {
-    Scanner *scanner = (Scanner *) calloc(1, sizeof (Scanner));
-    memset(scanner, 0, sizeof (Scanner));
+    Scanner *scanner = (Scanner *)calloc(1, sizeof(Scanner));
+    memset(scanner, 0, sizeof(Scanner));
     return scanner;
 }
 
 bool tree_sitter_cpp_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
-    Scanner *scanner = (Scanner *) payload;
+    Scanner *scanner = (Scanner *)payload;
 
     // No skipping leading whitespace: raw-string grammar is space-sensitive.
     if (valid_symbols[RAW_STRING_DELIMITER]) {
@@ -121,24 +121,24 @@ bool tree_sitter_cpp_external_scanner_scan(void *payload, TSLexer *lexer, const 
 }
 
 unsigned tree_sitter_cpp_external_scanner_serialize(void *payload, char *buffer) {
-    static_assert(MAX_DELIMITER_LENGTH * sizeof (wchar_t) < TREE_SITTER_SERIALIZATION_BUFFER_SIZE,
+    static_assert(MAX_DELIMITER_LENGTH * sizeof(wchar_t) < TREE_SITTER_SERIALIZATION_BUFFER_SIZE,
                   "Serialized delimiter is too long!");
 
-    Scanner *scanner = (Scanner *) payload;
-    size_t size = scanner->delimiter_length * sizeof (wchar_t);
+    Scanner *scanner = (Scanner *)payload;
+    size_t size = scanner->delimiter_length * sizeof(wchar_t);
     memcpy(buffer, scanner->delimiter, size);
-    return (unsigned) size;
+    return (unsigned)size;
 }
 
 void tree_sitter_cpp_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
-    assert(length % sizeof (wchar_t) == 0 && "Can't decode serialized delimiter!");
+    assert(length % sizeof(wchar_t) == 0 && "Can't decode serialized delimiter!");
 
-    Scanner *scanner = (Scanner *) payload;
-    scanner->delimiter_length = length / sizeof (wchar_t);
+    Scanner *scanner = (Scanner *)payload;
+    scanner->delimiter_length = length / sizeof(wchar_t);
     memcpy(&scanner->delimiter[0], buffer, length);
 }
 
 void tree_sitter_cpp_external_scanner_destroy(void *payload) {
-    Scanner *scanner = (Scanner *) payload;
+    Scanner *scanner = (Scanner *)payload;
     free(scanner);
 }
