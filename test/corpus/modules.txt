@@ -120,3 +120,96 @@ module :private;
 
 (translation_unit
   (private_module_fragment_declaration))
+
+
+================================================================================
+export declaration
+================================================================================
+
+export module A;
+
+export char const* hello() { return "hello"; }
+
+char const* world() { return "world"; }
+
+export {
+  int one() { return 1; }
+  int zero() { return 0; }
+}
+
+export namespace hi {
+char const* english() { return "Hi!"; }
+char const* french() { return "Salut!"; }
+}
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (module_declaration
+    name: (module_name
+      (identifier)))
+  (export_declaration
+    (function_definition
+      type: (primitive_type)
+      (type_qualifier)
+      declarator: (pointer_declarator
+        declarator: (function_declarator
+          declarator: (identifier)
+          parameters: (parameter_list)))
+      body: (compound_statement
+        (return_statement
+          (string_literal
+            (string_content))))))
+  (function_definition
+    type: (primitive_type)
+    (type_qualifier)
+    declarator: (pointer_declarator
+      declarator: (function_declarator
+        declarator: (identifier)
+        parameters: (parameter_list)))
+    body: (compound_statement
+      (return_statement
+        (string_literal
+          (string_content)))))
+  (export_declaration
+    (function_definition
+      type: (primitive_type)
+      declarator: (function_declarator
+        declarator: (identifier)
+        parameters: (parameter_list))
+      body: (compound_statement
+        (return_statement
+          (number_literal))))
+    (function_definition
+      type: (primitive_type)
+      declarator: (function_declarator
+        declarator: (identifier)
+        parameters: (parameter_list))
+      body: (compound_statement
+        (return_statement
+          (number_literal)))))
+  (export_declaration
+    (namespace_definition
+      name: (namespace_identifier)
+      body: (declaration_list
+        (function_definition
+          type: (primitive_type)
+          (type_qualifier)
+          declarator: (pointer_declarator
+            declarator: (function_declarator
+              declarator: (identifier)
+              parameters: (parameter_list)))
+          body: (compound_statement
+            (return_statement
+              (string_literal
+                (string_content)))))
+        (function_definition
+          type: (primitive_type)
+          (type_qualifier)
+          declarator: (pointer_declarator
+            declarator: (function_declarator
+              declarator: (identifier)
+              parameters: (parameter_list)))
+          body: (compound_statement
+            (return_statement
+              (string_literal
+                (string_content)))))))))
