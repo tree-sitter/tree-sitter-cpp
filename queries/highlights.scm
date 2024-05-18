@@ -32,6 +32,10 @@
 (this) @variable.builtin
 (null "nullptr" @constant)
 
+; Modules
+(module_name
+  (identifier) @module)
+
 ; Keywords
 
 [
