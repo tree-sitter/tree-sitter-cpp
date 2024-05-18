@@ -1,3 +1,10 @@
+export module keywords;
+// <- keyword
+//   ^ keyword
+
+import std;
+// ^ keyword
+
 using namespace std;
 // ^ keyword
 
