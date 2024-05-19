@@ -86,6 +86,8 @@ module.exports = grammar(C, {
     [$.initializer_pair, $.comma_expression],
     [$.expression_statement, $._for_statement_body],
     [$.init_statement, $._for_statement_body],
+    [$.field_expression, $.template_method, $.template_type],
+    [$.qualified_field_identifier, $.template_method, $.template_type],
   ],
 
   inline: ($, original) => original.concat([
@@ -998,19 +1000,19 @@ module.exports = grammar(C, {
       $.expression,
     ),
 
-    field_expression: $ => prec.right(seq(
+    field_expression: $ => seq(
       prec(PREC.FIELD, seq(
         field('argument', $.expression),
         field('operator', choice('.', '.*', '->')),
       )),
       field('field', choice(
-        $._field_identifier,
+        prec.dynamic(1, $._field_identifier),
         alias($.qualified_field_identifier, $.qualified_identifier),
         $.destructor_name,
         $.template_method,
         alias($.dependent_field_identifier, $.dependent_name),
       )),
-    )),
+    ),
 
     type_requirement: $ => seq('typename', $._class_name),
 
@@ -1215,15 +1217,15 @@ module.exports = grammar(C, {
       '::',
     )),
 
-    qualified_field_identifier: $ => prec.right(seq(
+    qualified_field_identifier: $ => seq(
       $._scope_resolution,
       field('name', choice(
         alias($.dependent_field_identifier, $.dependent_name),
         alias($.qualified_field_identifier, $.qualified_identifier),
         $.template_method,
-        $._field_identifier,
+        prec.dynamic(1, $._field_identifier),
       )),
-    )),
+    ),
 
     qualified_identifier: $ => seq(
       $._scope_resolution,
