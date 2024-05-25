@@ -243,7 +243,7 @@ module.exports = grammar(C, {
       'override', // legal for functions in addition to final, plus permutations.
     ),
 
-    virtual: _ => choice('virtual'),
+    virtual: _ => 'virtual',
 
     alignas_specifier: $ => seq(
       'alignas',

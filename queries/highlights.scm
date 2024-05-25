@@ -60,9 +60,9 @@
  "try"
  "typename"
  "using"
- "virtual"
  "concept"
  "requires"
+ (virtual)
 ] @keyword
 
 ; Strings
