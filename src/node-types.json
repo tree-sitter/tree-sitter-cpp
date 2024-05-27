@@ -4935,6 +4935,10 @@
             "named": true
           },
           {
+            "type": "preproc_elifdef",
+            "named": true
+          },
+          {
             "type": "preproc_else",
             "named": true
           }
@@ -5112,6 +5116,10 @@
         "types": [
           {
             "type": "preproc_elif",
+            "named": true
+          },
+          {
+            "type": "preproc_elifdef",
             "named": true
           },
           {
@@ -5427,6 +5435,10 @@
         "types": [
           {
             "type": "preproc_elif",
+            "named": true
+          },
+          {
+            "type": "preproc_elifdef",
             "named": true
           },
           {
@@ -7420,11 +7432,6 @@
     }
   },
   {
-    "type": "virtual",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "virtual_specifier",
     "named": true,
     "fields": {}
@@ -8281,7 +8288,7 @@
   },
   {
     "type": "virtual",
-    "named": false
+    "named": true
   },
   {
     "type": "volatile",

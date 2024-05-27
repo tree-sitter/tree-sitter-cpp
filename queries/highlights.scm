@@ -73,12 +73,12 @@
  "try"
  "typename"
  "using"
- "virtual"
  "concept"
  "requires"
  "import"
  "export"
  "module"
+ (virtual)
 ] @keyword
 
 ; Strings
