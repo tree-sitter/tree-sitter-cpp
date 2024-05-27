@@ -32,6 +32,19 @@
 (this) @variable.builtin
 (null "nullptr" @constant)
 
+((identifier) @constant
+  (#set! "priority"129)
+  (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
+
+((field_identifier) @constant
+  (#set! "priority" 129)
+  (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
+
+
+; Modules
+(module_name
+  (identifier) @module)
+
 ; Keywords
 
 [
@@ -62,6 +75,9 @@
  "using"
  "concept"
  "requires"
+ "import"
+ "export"
+ "module"
  (virtual)
 ] @keyword
 
