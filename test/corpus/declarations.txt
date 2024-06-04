@@ -2252,8 +2252,9 @@ int main(void) {
     (type_identifier)
     (field_declaration_list
       (field_declaration
-        (alignas_specifier
-          (number_literal))
+        (type_qualifier
+          (alignas_qualifier
+            (number_literal)))
         (primitive_type)
         (array_declarator
           (field_identifier)
@@ -2265,8 +2266,9 @@ int main(void) {
         (primitive_type)
         (field_identifier))
       (field_declaration
-        (alignas_specifier
-          (number_literal))
+        (type_qualifier
+          (alignas_qualifier
+            (number_literal)))
         (primitive_type)
         (array_declarator
           (field_identifier)
@@ -2304,8 +2306,9 @@ int main(void) {
                 (struct_specifier
                   (type_identifier)))))))
       (declaration
-        (alignas_specifier
-          (number_literal))
+        (type_qualifier
+          (alignas_qualifier
+            (number_literal)))
         (struct_specifier
           (type_identifier))
         (identifier))
