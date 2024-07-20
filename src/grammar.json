@@ -1,6 +1,6 @@
 {
-  "0": "c",
   "name": "cpp",
+  "inherits": "c",
   "word": "identifier",
   "rules": {
     "translation_unit": {
