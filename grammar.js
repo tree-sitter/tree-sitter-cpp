@@ -68,6 +68,8 @@ module.exports = grammar(C, {
     [$._block_item, $.statement],
 
     // C++
+    [$._declaration_modifiers, $.using_declaration],
+    [$._declaration_modifiers, $.attributed_statement, $.using_declaration],
     [$.template_function, $.template_type],
     [$.template_function, $.template_type, $.expression],
     [$.template_function, $.template_type, $.qualified_identifier],
@@ -128,6 +130,27 @@ module.exports = grammar(C, {
       alias($.constructor_or_destructor_definition, $.function_definition),
       alias($.operator_cast_definition, $.function_definition),
       alias($.operator_cast_declaration, $.declaration),
+    ),
+
+    // Attributes
+    _plain_attribute: $ => seq(
+      field('name', $.identifier),
+      optional($.argument_list),
+    ),
+
+    _scoped_attribute: $ => seq(
+      seq(field('prefix', $.identifier), '::'),
+      $._plain_attribute
+    ),
+
+    attribute: $ => choice(
+      $._plain_attribute,
+      $._scoped_attribute
+    ),
+
+    attribute_declaration: $ => choice(
+      seq('[[', commaSep1($.attribute),']]'),
+      seq('[[', 'using', field('prefix', $.identifier), ':', commaSep1(alias($._plain_attribute, $.attribute)), ']]')
     ),
 
     // Types
@@ -745,6 +768,7 @@ module.exports = grammar(C, {
     )),
 
     using_declaration: $ => seq(
+      repeat($.attribute_declaration),
       'using',
       optional(choice('namespace', 'enum')),
       choice(
