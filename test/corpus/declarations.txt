@@ -788,8 +788,12 @@ Attributes
 ================================================================================
 
 int f([[a::b(c), d]] int x) {}
+int f([[using a:b(c), d]] int x) {}
 
 [[gnu::always_inline]] [[gnu::hot]] [[gnu::const]] [[nodiscard]]
+inline int g();
+
+[[using gnu: always_inline, hot, visibility("default")]] [[gnu::const]] [[nodiscard]]
 inline int g();
 
 [[aaa]]
@@ -822,6 +826,23 @@ class A final : [[deprecated]] public B {};
           (primitive_type)
           (identifier))))
     (compound_statement))
+  (function_definition
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list
+        (parameter_declaration
+          (attribute_declaration
+            (identifier)
+            (attribute
+              (identifier)
+              (argument_list
+                (identifier)))
+            (attribute
+              (identifier)))
+          (primitive_type)
+          (identifier))))
+    (compound_statement))
   (declaration
     (attribute_declaration
       (attribute
@@ -831,6 +852,30 @@ class A final : [[deprecated]] public B {};
       (attribute
         (identifier)
         (identifier)))
+    (attribute_declaration
+      (attribute
+        (identifier)
+        (identifier)))
+    (attribute_declaration
+      (attribute
+        (identifier)))
+    (storage_class_specifier)
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list)))
+  (declaration
+    (attribute_declaration
+      (identifier)
+      (attribute
+        (identifier))
+      (attribute
+        (identifier))
+      (attribute
+        (identifier)
+        (argument_list
+          (string_literal
+            (string_content)))))
     (attribute_declaration
       (attribute
         (identifier)

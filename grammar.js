@@ -130,6 +130,13 @@ module.exports = grammar(C, {
       alias($.operator_cast_declaration, $.declaration),
     ),
 
+    // Attributes
+
+    attribute_declaration: $ => choice(
+      seq('[[', commaSep1($.attribute),']]'),
+      seq('[[', 'using', field('prefix', $.identifier), ':', commaSep1($.attribute), ']]')
+    ),
+
     // Types
 
     placeholder_type_specifier: $ => prec(1, seq(
