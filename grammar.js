@@ -68,6 +68,8 @@ module.exports = grammar(C, {
     [$._block_item, $.statement],
 
     // C++
+    [$._declaration_modifiers, $.using_declaration],
+    [$._declaration_modifiers, $.attributed_statement, $.using_declaration],
     [$.template_function, $.template_type],
     [$.template_function, $.template_type, $.expression],
     [$.template_function, $.template_type, $.qualified_identifier],
@@ -752,7 +754,7 @@ module.exports = grammar(C, {
     )),
 
     using_declaration: $ => seq(
-      optional($.attribute_declaration),
+      repeat($.attribute_declaration),
       'using',
       optional(choice('namespace', 'enum')),
       choice(

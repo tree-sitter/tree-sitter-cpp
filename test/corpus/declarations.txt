@@ -99,6 +99,7 @@ using h = i::j;
 using namespace std;
 using enum Foo;
 [[deprecated]] using namespace std;
+[[deprecated]] [[gnu::hot]] [[using gnu: const]] using namespace std;
 
 template <typename T>
 using a = typename b<T>::c;
@@ -137,6 +138,19 @@ using foobar [[deprecated]] [[maybe_unused]] = int;
     (identifier))
   (using_declaration
     (attribute_declaration
+      (attribute
+        (identifier)))
+    (identifier))
+  (using_declaration
+    (attribute_declaration
+      (attribute
+        (identifier)))
+    (attribute_declaration
+      (attribute
+        (identifier)
+        (identifier)))
+    (attribute_declaration
+      (identifier)
       (attribute
         (identifier)))
     (identifier))
