@@ -752,6 +752,7 @@ module.exports = grammar(C, {
     )),
 
     using_declaration: $ => seq(
+      optional($.attribute_declaration),
       'using',
       optional(choice('namespace', 'enum')),
       choice(
