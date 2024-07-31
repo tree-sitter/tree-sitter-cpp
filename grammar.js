@@ -133,10 +133,24 @@ module.exports = grammar(C, {
     ),
 
     // Attributes
+    _plain_attribute: $ => seq(
+      field('name', $.identifier),
+      optional($.argument_list),
+    ),
+
+    _scoped_attribute: $ => seq(
+      seq(field('prefix', $.identifier), '::'),
+      $._plain_attribute
+    ),
+
+    attribute: $ => choice(
+      $._plain_attribute,
+      $._scoped_attribute
+    ),
 
     attribute_declaration: $ => choice(
       seq('[[', commaSep1($.attribute),']]'),
-      seq('[[', 'using', field('prefix', $.identifier), ':', commaSep1($.attribute), ']]')
+      seq('[[', 'using', field('prefix', $.identifier), ':', commaSep1(alias($._plain_attribute, $.attribute)), ']]')
     ),
 
     // Types
