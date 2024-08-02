@@ -5,6 +5,12 @@ template functions vs relational expressions
 T1 a = b < c > d;
 T2 e = f<T3>(g);
 int a = std::get<0>(t);
+if (x.y < z) break; // Not a template missing a '>'
+if (x.y < x->y && x.y > 50) break;
+if (x.foo < 0 || bar >= 1) break;
+if (x.Base::foo < 0 || bar >= 1) {
+  bool i = x.Base::foo < 0 || 1 > (5); // No way to tell
+}
 
 ---
 
@@ -34,7 +40,75 @@ int a = std::get<0>(t);
           (template_function
             (identifier)
             (template_argument_list (number_literal))))
-        (argument_list (identifier))))))
+        (argument_list (identifier)))))
+  (if_statement
+    (condition_clause
+      (binary_expression
+        (field_expression
+          (identifier)
+          (field_identifier))
+        (identifier)))
+    (break_statement))
+  (comment)
+  (if_statement
+    (condition_clause
+      (binary_expression
+        (binary_expression
+          (field_expression
+            (identifier)
+            (field_identifier))
+          (field_expression
+            (identifier)
+            (field_identifier)))
+        (binary_expression
+          (field_expression
+            (identifier)
+            (field_identifier))
+          (number_literal))))
+    (break_statement))
+  (if_statement
+    (condition_clause
+      (binary_expression
+        (binary_expression
+          (field_expression
+            (identifier)
+            (field_identifier))
+          (number_literal))
+        (binary_expression
+          (identifier)
+          (number_literal))))
+    (break_statement))
+  (if_statement
+    (condition_clause
+      (binary_expression
+        (binary_expression
+          (field_expression
+            (identifier)
+            (qualified_identifier
+              (namespace_identifier)
+              (field_identifier)))
+          (number_literal))
+        (binary_expression
+          (identifier)
+          (number_literal))))
+    (compound_statement
+      (declaration
+        (primitive_type)
+        (init_declarator
+          (identifier)
+          (binary_expression
+            (binary_expression
+              (field_expression
+                (identifier)
+                (qualified_identifier
+                  (namespace_identifier)
+                  (field_identifier)))
+              (number_literal))
+            (binary_expression
+              (number_literal)
+              (parenthesized_expression
+                (number_literal))))))
+    (comment))))
 
 =================================================
 function declarations vs variable initializations

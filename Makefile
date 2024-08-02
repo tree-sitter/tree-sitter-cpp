@@ -1,4 +1,4 @@
-VERSION := 0.22.1
+VERSION := 0.22.3
 
 LANGUAGE_NAME := tree-sitter-cpp
 

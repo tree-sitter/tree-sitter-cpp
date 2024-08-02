@@ -33,12 +33,10 @@
 (null "nullptr" @constant)
 
 ((identifier) @constant
-  (#set! "priority"129)
-  (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
+ (#match? @constant "^[A-Z][A-Z\\d_]+$'"))
 
 ((field_identifier) @constant
-  (#set! "priority" 129)
-  (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
+ (#match? @constant "^[A-Z][A-Z\\d_]+$'"))
 
 
 ; Modules
