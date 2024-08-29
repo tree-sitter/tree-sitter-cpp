@@ -1,6 +1,6 @@
 {
+  "0": "c",
   "name": "cpp",
-  "inherits": "c",
   "word": "identifier",
   "rules": {
     "translation_unit": {
@@ -96,6 +96,26 @@
         {
           "type": "SYMBOL",
           "name": "template_instantiation"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "export_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "import_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "global_module_fragment_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "private_module_fragment_declaration"
         },
         {
           "type": "ALIAS",
@@ -212,6 +232,26 @@
         {
           "type": "SYMBOL",
           "name": "template_instantiation"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "export_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "import_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "global_module_fragment_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "private_module_fragment_declaration"
         },
         {
           "type": "ALIAS",
@@ -11542,6 +11582,322 @@
           ]
         }
       }
+    },
+    "module_name": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "."
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "module_partition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_name"
+        }
+      ]
+    },
+    "_exportable_item": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "template_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "template_instantiation"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "namespace_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "linkage_specification"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "attributed_statement"
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "gnu_asm_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "using_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "namespace_alias_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "static_assert_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "alias_declaration"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_specifier"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        }
+      ]
+    },
+    "module_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "export"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "module"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "module_name"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "partition",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_partition"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "attribute_declaration"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "export_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "export"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_exportable_item"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "{"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_exportable_item"
+                  }
+                },
+                {
+                  "type": "STRING",
+                  "value": "}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "import_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "export"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "import"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "module_name"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "partition",
+              "content": {
+                "type": "SYMBOL",
+                "name": "module_partition"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "header",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "string_literal"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "system_lib_string"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "attribute_declaration"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "global_module_fragment_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "module"
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "private_module_fragment_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "module"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "STRING",
+          "value": "private"
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
     },
     "template_declaration": {
       "type": "SEQ",
