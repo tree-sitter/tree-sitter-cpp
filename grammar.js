@@ -66,6 +66,7 @@ module.exports = grammar(C, {
     [$._declaration_modifiers, $.attributed_statement],
     [$._top_level_item, $._top_level_statement],
     [$._block_item, $.statement],
+    [$.type_qualifier, $.extension_expression],
 
     // C++
     [$.template_function, $.template_type],
@@ -1189,7 +1190,7 @@ module.exports = grammar(C, {
     // The compound_statement is added to parse macros taking statements as arguments, e.g. MYFORLOOP(1, 10, i, { foo(i); bar(i); })
     argument_list: $ => seq(
       '(',
-      commaSep(choice(seq(optional('__extension__'), $.expression), $.initializer_list, $.compound_statement)),
+      commaSep(choice($.expression, $.initializer_list, $.compound_statement)),
       ')',
     ),
 
