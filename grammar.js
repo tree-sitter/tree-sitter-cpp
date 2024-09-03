@@ -552,6 +552,7 @@ module.exports = grammar(C, {
     pure_virtual_clause: _ => seq('=', /0/, ';'),
 
     friend_declaration: $ => seq(
+      optional('constexpr'),
       'friend',
       choice(
         $.declaration,
