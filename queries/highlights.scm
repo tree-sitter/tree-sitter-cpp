@@ -62,7 +62,7 @@
  "using"
  "concept"
  "requires"
- (virtual)
+ "virtual"
 ] @keyword
 
 ; Strings
