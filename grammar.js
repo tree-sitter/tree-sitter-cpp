@@ -769,11 +769,7 @@ module.exports = grammar(C, {
       field('condition', $.expression),
       optional(seq(
         ',',
-        field('message', choice(
-          $.string_literal,
-          $.raw_string_literal,
-          $.concatenated_string,
-        )),
+        field('message', $._string),
       )),
       ')',
       ';',
@@ -930,9 +926,14 @@ module.exports = grammar(C, {
       $.lambda_expression,
       $.parameter_pack_expansion,
       $.this,
-      $.raw_string_literal,
       $.user_defined_literal,
       $.fold_expression,
+    ),
+
+    _string: $ => choice(
+      $.string_literal,
+      $.raw_string_literal,
+      $.concatenated_string,
     ),
 
     raw_string_literal: $ => seq(
@@ -945,11 +946,8 @@ module.exports = grammar(C, {
           ')',
           $.raw_string_delimiter,
         ),
-        seq(
-          '(',
-          $.raw_string_content,
-          ')',
-        )),
+        seq('(', $.raw_string_content, ')'),
+      ),
       '"',
     ),
 
@@ -1372,9 +1370,7 @@ module.exports = grammar(C, {
       choice(
         $.number_literal,
         $.char_literal,
-        $.string_literal,
-        $.raw_string_literal,
-        $.concatenated_string,
+        $._string,
       ),
       $.literal_suffix,
     ),
