@@ -468,6 +468,7 @@ module.exports = grammar(C, {
       $.using_declaration,
       $.type_definition,
       $.static_assert_declaration,
+      ';',
     ),
 
     field_declaration: $ => seq(
