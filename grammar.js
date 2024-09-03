@@ -549,7 +549,7 @@ module.exports = grammar(C, {
 
     default_method_clause: _ => seq('=', 'default', ';'),
     delete_method_clause: _ => seq('=', 'delete', ';'),
-    pure_virtual_clause: _ => seq('=', '0', ';'),
+    pure_virtual_clause: _ => seq('=', /0/, ';'),
 
     friend_declaration: $ => seq(
       'friend',
