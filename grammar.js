@@ -78,6 +78,11 @@ module.exports = grammar(C, {
     [$.expression, $._declarator],
     [$.expression, $.structured_binding_declarator],
     [$.expression, $._declarator, $.type_specifier],
+    [$.expression, $.identifier_parameter_pack_expansion],
+    [$.expression, $._lambda_capture_identifier],
+    [$.expression, $._lambda_capture],
+    [$.expression, $.structured_binding_declarator, $._lambda_capture_identifier],
+    [$.structured_binding_declarator, $._lambda_capture_identifier],
     [$.parameter_list, $.argument_list],
     [$.type_specifier, $.call_expression],
     [$._declaration_specifiers, $._constructor_specifiers],
@@ -1094,16 +1099,39 @@ module.exports = grammar(C, {
       '[',
       choice(
         $.lambda_default_capture,
-        commaSep($.expression),
+        commaSep($._lambda_capture),
         seq(
           $.lambda_default_capture,
-          ',', commaSep1($.expression),
+          ',', commaSep1($._lambda_capture),
         ),
       ),
       ']',
     )),
 
     lambda_default_capture: _ => choice('=', '&'),
+
+    _lambda_capture_identifier: $ => seq(
+      optional('&'),
+      choice(
+        $.identifier,
+        $.qualified_identifier,
+        alias($.identifier_parameter_pack_expansion, $.parameter_pack_expansion),
+      ),
+    ),
+
+    lambda_capture_initializer: $ => seq(
+      optional('&'),
+      optional('...'),
+      field('left', $.identifier),
+      '=',
+      field('right', $.expression),
+    ),
+
+    _lambda_capture: $ => choice(
+      seq(optional('*'), $.this),
+      $._lambda_capture_identifier,
+      $.lambda_capture_initializer,
+    ),
 
     _fold_operator: _ => choice(...FOLD_OPERATORS),
     _binary_fold_operator: _ => choice(...FOLD_OPERATORS.map((operator) => seq(field('operator', operator), '...', operator))),
@@ -1141,6 +1169,11 @@ module.exports = grammar(C, {
 
     type_parameter_pack_expansion: $ => seq(
       field('pattern', $.type_descriptor),
+      '...',
+    ),
+
+    identifier_parameter_pack_expansion: $ => seq(
+      field('pattern', $.identifier),
       '...',
     ),
 

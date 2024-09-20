@@ -278,21 +278,29 @@ auto f = [&](int x) -> bool {
   return true;
 };
 
-auto g = [x, y](int z) {
+auto f = [x, y](int z) {
   return false;
 };
 
-auto h = [] {
+auto f = [] {
   return false;
 };
 
-auto i = [] <typename T> () {
+auto f = [] <typename T> () {
   return T();
 };
 
-auto i = [] <typename T> requires Hashable<T> {
+auto f = [] <typename T> requires Hashable<T> {
   return T();
 };
+
+auto f = [... args = std::forward<Args>(args)](auto &&func) mutable {
+  return std::invoke(std::forward<decltype(func)>(func), std::forward<Args>(args)...);
+};
+
+auto f = [&arg, &...etc = etc] {};
+
+auto f = [=, *this, &args...] {};
 
 --------------------------------------------------------------------------------
 
@@ -380,7 +388,87 @@ auto i = [] <typename T> requires Hashable<T> {
           (return_statement
             (call_expression
               (identifier)
-              (argument_list))))))))
+              (argument_list)))))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (lambda_expression
+        (lambda_capture_specifier
+          (lambda_capture_initializer
+            (identifier)
+            (call_expression
+              (qualified_identifier
+                (namespace_identifier)
+                (template_function
+                  (identifier)
+                  (template_argument_list
+                    (type_descriptor
+                      (type_identifier)))))
+              (argument_list
+                (identifier)))))
+        (abstract_function_declarator
+          (parameter_list
+            (parameter_declaration
+              (placeholder_type_specifier
+                (auto))
+              (reference_declarator
+                (identifier))))
+          (type_qualifier))
+        (compound_statement
+          (return_statement
+            (call_expression
+              (qualified_identifier
+                (namespace_identifier)
+                (identifier))
+              (argument_list
+                (call_expression
+                  (qualified_identifier
+                    (namespace_identifier)
+                    (template_function
+                      (identifier)
+                      (template_argument_list
+                        (type_descriptor
+                          (decltype
+                            (identifier))))))
+                  (argument_list
+                    (identifier)))
+                (parameter_pack_expansion
+                  (call_expression
+                    (qualified_identifier
+                      (namespace_identifier)
+                      (template_function
+                        (identifier)
+                        (template_argument_list
+                          (type_descriptor
+                            (type_identifier)))))
+                    (argument_list
+                      (identifier)))))))))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (lambda_expression
+        (lambda_capture_specifier
+          (identifier)
+          (lambda_capture_initializer
+            (identifier)
+            (identifier)))
+        (compound_statement))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (lambda_expression
+        (lambda_capture_specifier
+          (lambda_default_capture)
+          (this)
+          (parameter_pack_expansion
+            (identifier)))
+        (compound_statement)))))
 
 ================================================================================
 Nested template calls
