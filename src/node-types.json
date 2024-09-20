@@ -3759,6 +3759,32 @@
     }
   },
   {
+    "type": "lambda_capture_initializer",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "lambda_capture_specifier",
     "named": true,
     "fields": {},
@@ -3767,11 +3793,27 @@
       "required": false,
       "types": [
         {
-          "type": "expression",
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "lambda_capture_initializer",
           "named": true
         },
         {
           "type": "lambda_default_capture",
+          "named": true
+        },
+        {
+          "type": "parameter_pack_expansion",
+          "named": true
+        },
+        {
+          "type": "qualified_identifier",
+          "named": true
+        },
+        {
+          "type": "this",
           "named": true
         }
       ]
