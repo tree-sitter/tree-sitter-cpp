@@ -3288,8 +3288,17 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "__attribute__"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "__attribute__"
+            },
+            {
+              "type": "STRING",
+              "value": "__attribute"
+            }
+          ]
         },
         {
           "type": "STRING",
@@ -5067,6 +5076,13 @@
               }
             },
             {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "type_qualifier"
+              }
+            },
+            {
               "type": "FIELD",
               "name": "type",
               "content": {
@@ -6095,6 +6111,13 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "attribute_specifier"
+          }
         }
       ]
     },
@@ -6342,8 +6365,16 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_expression_not_binary"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_expression_not_binary"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",
@@ -8920,6 +8951,10 @@
         },
         {
           "type": "STRING",
+          "value": "__volatile__"
+        },
+        {
+          "type": "STRING",
           "value": "inline"
         },
         {
@@ -9027,7 +9062,7 @@
           "name": "value",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "expression"
           }
         },
         {
@@ -10765,7 +10800,7 @@
                 },
                 {
                   "type": "PATTERN",
-                  "value": "x[0-9a-fA-F]{2,}"
+                  "value": "x[0-9a-fA-F]{1,4}"
                 },
                 {
                   "type": "PATTERN",

@@ -3522,7 +3522,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "expression",
             "named": true
           }
         ]
@@ -5880,6 +5880,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "type_qualifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -7445,6 +7455,10 @@
     "named": false
   },
   {
+    "type": "__attribute",
+    "named": false
+  },
+  {
     "type": "__attribute__",
     "named": false
   },
@@ -7522,6 +7536,10 @@
   },
   {
     "type": "__vectorcall",
+    "named": false
+  },
+  {
+    "type": "__volatile__",
     "named": false
   },
   {

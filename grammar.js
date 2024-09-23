@@ -1418,8 +1418,7 @@ module.exports = grammar(C, {
  *
  * @param {Rule} rule
  *
- * @return {ChoiceRule}
- *
+ * @returns {ChoiceRule}
  */
 function commaSep(rule) {
   return optional(commaSep1(rule));
@@ -1430,8 +1429,7 @@ function commaSep(rule) {
  *
  * @param {Rule} rule
  *
- * @return {SeqRule}
- *
+ * @returns {SeqRule}
  */
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
