@@ -76,7 +76,7 @@
  "import"
  "export"
  "module"
- (virtual)
+ "virtual"
 ] @keyword
 
 ; Strings

@@ -45,6 +45,10 @@ jobs:
         uses: tree-sitter/parser-test-action@v2
         with:
           test-rust: ${{runner.os == 'Linux'}}
+          test-node: true
+          test-python: true
+          test-go: true
+          test-swift: ${{runner.os == 'macOS'}}
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:

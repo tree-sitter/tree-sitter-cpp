@@ -1,9 +1,5 @@
 * text=auto eol=lf
 
-test/corpus/c/crlf.txt eol=crlf
-
-examples/* linguist-vendored
-
 src/*.json linguist-generated
 src/parser.c linguist-generated
 src/tree_sitter/* linguist-generated

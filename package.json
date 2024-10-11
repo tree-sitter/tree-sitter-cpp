@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-cpp",
-  "version": "0.22.3",
+  "version": "0.23.1",
   "description": "C++ grammar for tree-sitter",
   "repository": "github:tree-sitter/tree-sitter-cpp",
   "license": "MIT",
@@ -25,32 +25,30 @@
     "src/**"
   ],
   "dependencies": {
-    "node-addon-api": "^8.0.0",
-    "node-gyp-build": "^4.8.1"
+    "node-addon-api": "^8.1.0",
+    "node-gyp-build": "^4.8.2"
   },
   "peerDependencies": {
     "tree-sitter": "^0.21.1"
   },
   "peerDependenciesMeta": {
-    "tree_sitter": {
+    "tree-sitter": {
       "optional": true
     }
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-config-google": "^0.14.0",
+    "eslint": "^9.11.0",
+    "eslint-config-treesitter": "^1.0.2",
     "prebuildify": "^6.0.1",
-    "tree-sitter-c": "^0.21.4",
-    "tree-sitter-cli": "^0.22.6"
+    "tree-sitter-c": "^0.23.1",
+    "tree-sitter-cli": "^0.23.0"
   },
   "scripts": {
     "install": "node-gyp-build",
-    "prebuildify": "prebuildify --napi --strip",
-    "build": "tree-sitter generate --no-bindings",
-    "build-wasm": "tree-sitter build-wasm",
     "lint": "eslint grammar.js",
-    "parse": "tree-sitter parse",
-    "test": "tree-sitter test"
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "node --test bindings/node/*_test.js"
   },
   "tree-sitter": [
     {
@@ -70,47 +68,5 @@
       "injections": "queries/injections.scm",
       "injection-regex": "^(cc|cpp)$"
     }
-  ],
-  "eslintConfig": {
-    "env": {
-      "commonjs": true,
-      "es2021": true
-    },
-    "extends": "google",
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "rules": {
-      "arrow-parens": "off",
-      "camel-case": "off",
-      "indent": [
-        "error",
-        2,
-        {
-          "SwitchCase": 1
-        }
-      ],
-      "max-len": [
-        "error",
-        {
-          "code": 160,
-          "ignoreComments": true,
-          "ignoreUrls": true,
-          "ignoreStrings": true
-        }
-      ],
-      "spaced-comment": [
-        "warn",
-        "always",
-        {
-          "line": {
-            "markers": [
-              "/"
-            ]
-          }
-        }
-      ]
-    }
-  }
+  ]
 }

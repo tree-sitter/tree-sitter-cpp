@@ -3,7 +3,7 @@ package tree_sitter_cpp_test
 import (
 	"testing"
 
-	tree_sitter "github.com/smacker/go-tree-sitter"
+	tree_sitter "github.com/tree-sitter/go-tree-sitter"
 	tree_sitter_cpp "github.com/tree-sitter/tree-sitter-cpp/bindings/go"
 )
 
