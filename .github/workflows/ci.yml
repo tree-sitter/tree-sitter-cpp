@@ -38,17 +38,17 @@ jobs:
           repository: tree-sitter/tree-sitter-c
           path: node_modules/tree-sitter-c
           sparse-checkout: queries/
-          ref: v0.21.0
+          ref: v0.23.1
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v1
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
-          test-rust: ${{runner.os == 'Linux'}}
+          test-rust: true
           test-node: true
           test-python: true
           test-go: true
-          test-swift: ${{runner.os == 'macOS'}}
+          test-swift: true
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
