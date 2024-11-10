@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-cpp
-        VERSION "0.23.2"
+        VERSION "0.23.1"
         DESCRIPTION "C++ grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-cpp"
         LANGUAGES C)
@@ -25,7 +25,7 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.c"
                    COMMENT "Generating parser.c")
 
 add_library(tree-sitter-cpp src/parser.c)
-if(EXISTS src/scanner.c)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/scanner.c)
   target_sources(tree-sitter-cpp PRIVATE src/scanner.c)
 endif()
 target_include_directories(tree-sitter-cpp PRIVATE src)
@@ -53,8 +53,6 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-cpp.pc"
 install(TARGETS tree-sitter-cpp
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-add_custom_target(test "${TREE_SITTER_CLI}" test
+add_custom_target(ts-test "${TREE_SITTER_CLI}" test
                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                   COMMENT "tree-sitter test")
-
-# vim:ft=cmake:
