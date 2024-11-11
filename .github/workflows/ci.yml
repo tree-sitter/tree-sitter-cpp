@@ -40,7 +40,7 @@ jobs:
           sparse-checkout: queries/
           ref: v0.23.1
       - name: Set up tree-sitter
-        uses: tree-sitter/setup-action/cli@v1
+        uses: tree-sitter/setup-action/cli@v2
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
