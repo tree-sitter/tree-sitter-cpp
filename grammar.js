@@ -83,6 +83,7 @@ module.exports = grammar(C, {
     [$.expression, $._lambda_capture],
     [$.expression, $.structured_binding_declarator, $._lambda_capture_identifier],
     [$.structured_binding_declarator, $._lambda_capture_identifier],
+    [$.lambda_declarator],
     [$.parameter_list, $.argument_list],
     [$.type_specifier, $.call_expression],
     [$._declaration_specifiers, $._constructor_specifiers],
@@ -1085,13 +1086,46 @@ module.exports = grammar(C, {
       field('requirements', $.requirement_seq),
     ),
 
+    lambda_declarator: $ => choice(
+      // main declarator form, includes parameter list
+      seq(
+        field('parameters', $.parameter_list),
+        repeat($.attribute_declaration),
+        optional($.type_qualifier),
+        optional($._function_exception_specification),
+        repeat($.attribute_declaration),
+        optional($.trailing_return_type),
+        optional($.requires_clause),
+      ),
+
+      // forms supporting omitted parameter list
+      repeat1($.attribute_declaration),
+      seq(
+        repeat($.attribute_declaration),
+        $.trailing_return_type,
+      ),
+      seq(
+        repeat($.attribute_declaration),
+        $._function_exception_specification,
+        repeat($.attribute_declaration),
+        optional($.trailing_return_type),
+      ),
+      seq(
+        repeat($.attribute_declaration),
+        $.type_qualifier,
+        optional($._function_exception_specification),
+        repeat($.attribute_declaration),
+        optional($.trailing_return_type),
+      ),
+    ),
+
     lambda_expression: $ => seq(
       field('captures', $.lambda_capture_specifier),
       optional(seq(
         field('template_parameters', $.template_parameter_list),
         optional(field('constraint', $.requires_clause)),
       )),
-      optional(field('declarator', $.abstract_function_declarator)),
+      optional(field('declarator', $.lambda_declarator)),
       field('body', $.compound_statement),
     ),
 

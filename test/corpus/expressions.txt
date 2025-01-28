@@ -302,6 +302,10 @@ auto f = [&arg, &...etc = etc] {};
 
 auto f = [=, *this, &args...] {};
 
+auto f = [] -> int {};
+
+auto f = [s = S{}] mutable {};
+
 --------------------------------------------------------------------------------
 
 (translation_unit
@@ -313,7 +317,7 @@ auto f = [=, *this, &args...] {};
       (lambda_expression
         (lambda_capture_specifier
           (lambda_default_capture))
-        (abstract_function_declarator
+        (lambda_declarator
           (parameter_list
             (parameter_declaration
               (primitive_type)
@@ -333,7 +337,7 @@ auto f = [=, *this, &args...] {};
         (lambda_capture_specifier
           (identifier)
           (identifier))
-        (abstract_function_declarator
+        (lambda_declarator
           (parameter_list
             (parameter_declaration
               (primitive_type)
@@ -361,7 +365,7 @@ auto f = [=, *this, &args...] {};
         (template_parameter_list
           (type_parameter_declaration
             (type_identifier)))
-        (abstract_function_declarator
+        (lambda_declarator
           (parameter_list))
         (compound_statement
           (return_statement
@@ -408,7 +412,7 @@ auto f = [=, *this, &args...] {};
                       (type_identifier)))))
               (argument_list
                 (identifier)))))
-        (abstract_function_declarator
+        (lambda_declarator
           (parameter_list
             (parameter_declaration
               (placeholder_type_specifier
@@ -468,6 +472,33 @@ auto f = [=, *this, &args...] {};
           (this)
           (parameter_pack_expansion
             (identifier)))
+        (compound_statement))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (lambda_expression
+        (lambda_capture_specifier)
+        (lambda_declarator
+          (trailing_return_type
+            (type_descriptor
+              (primitive_type))))
+        (compound_statement))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (lambda_expression
+        (lambda_capture_specifier
+          (lambda_capture_initializer
+            (identifier)
+            (compound_literal_expression
+              (type_identifier)
+              (initializer_list))))
+        (lambda_declarator
+          (type_qualifier))
         (compound_statement)))))
 
 ================================================================================
