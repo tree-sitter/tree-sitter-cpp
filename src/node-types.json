@@ -3820,6 +3820,52 @@
     }
   },
   {
+    "type": "lambda_declarator",
+    "named": true,
+    "fields": {
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "parameter_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "attribute_declaration",
+          "named": true
+        },
+        {
+          "type": "noexcept",
+          "named": true
+        },
+        {
+          "type": "requires_clause",
+          "named": true
+        },
+        {
+          "type": "throw_specifier",
+          "named": true
+        },
+        {
+          "type": "trailing_return_type",
+          "named": true
+        },
+        {
+          "type": "type_qualifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "lambda_default_capture",
     "named": true,
     "fields": {}
@@ -3863,7 +3909,7 @@
         "required": false,
         "types": [
           {
-            "type": "abstract_function_declarator",
+            "type": "lambda_declarator",
             "named": true
           }
         ]
