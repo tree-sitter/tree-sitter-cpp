@@ -14752,18 +14752,18 @@
           "type": "SEQ",
           "members": [
             {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "attribute_declaration"
+              }
+            },
+            {
               "type": "FIELD",
               "name": "parameters",
               "content": {
                 "type": "SYMBOL",
                 "name": "parameter_list"
-              }
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SYMBOL",
-                "name": "attribute_declaration"
               }
             },
             {
@@ -17169,9 +17169,6 @@
     [
       "structured_binding_declarator",
       "_lambda_capture_identifier"
-    ],
-    [
-      "lambda_declarator"
     ],
     [
       "parameter_list",
