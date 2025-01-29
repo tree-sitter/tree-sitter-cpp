@@ -83,7 +83,6 @@ module.exports = grammar(C, {
     [$.expression, $._lambda_capture],
     [$.expression, $.structured_binding_declarator, $._lambda_capture_identifier],
     [$.structured_binding_declarator, $._lambda_capture_identifier],
-    [$.lambda_declarator],
     [$.parameter_list, $.argument_list],
     [$.type_specifier, $.call_expression],
     [$._declaration_specifiers, $._constructor_specifiers],
@@ -1089,8 +1088,8 @@ module.exports = grammar(C, {
     lambda_declarator: $ => choice(
       // main declarator form, includes parameter list
       seq(
-        field('parameters', $.parameter_list),
         repeat($.attribute_declaration),
+        field('parameters', $.parameter_list),
         optional($.type_qualifier),
         optional($._function_exception_specification),
         repeat($.attribute_declaration),

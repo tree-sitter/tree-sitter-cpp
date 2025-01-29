@@ -306,6 +306,8 @@ auto f = [] -> int {};
 
 auto f = [s = S{}] mutable {};
 
+auto f = [] [[noreturn]] (int i) { throw 1; };
+
 --------------------------------------------------------------------------------
 
 (translation_unit
@@ -499,7 +501,25 @@ auto f = [s = S{}] mutable {};
               (initializer_list))))
         (lambda_declarator
           (type_qualifier))
-        (compound_statement)))))
+        (compound_statement))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (lambda_expression
+        (lambda_capture_specifier)
+        (lambda_declarator
+          (attribute_declaration
+            (attribute
+              (identifier)))
+          (parameter_list
+            (parameter_declaration
+              (primitive_type)
+              (identifier))))
+        (compound_statement
+          (throw_statement
+            (number_literal)))))))
 
 ================================================================================
 Nested template calls
