@@ -326,7 +326,7 @@ module.exports = grammar(C, {
 
     module_name: $ => seq(
       $.identifier,
-      repeat(seq('.', $.identifier)
+      repeat(seq('.', $.identifier),
       ),
     ),
 
@@ -341,20 +341,20 @@ module.exports = grammar(C, {
       field('name', $.module_name),
       field('partition', optional($.module_partition)),
       optional($.attribute_declaration),
-      ';'
+      ';',
     ),
 
     export_declaration: $ => seq(
       'export',
-      choice($._block_item, seq('{', repeat($._block_item), '}'))
+      choice($._block_item, seq('{', repeat($._block_item), '}')),
     ),
 
     import_declaration: $ => seq(
       optional('export'),
       'import',
       choice(
-        field("name", $.module_name),
-        field("partition", $.module_partition),
+        field('name', $.module_name),
+        field('partition', $.module_partition),
         field('header', choice(
           $.string_literal,
           $.system_lib_string,
