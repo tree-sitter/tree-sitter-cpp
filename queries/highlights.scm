@@ -63,6 +63,9 @@
  "concept"
  "requires"
  "virtual"
+ "import"
+ "export"
+ "module"
 ] @keyword
 
 ; Strings
