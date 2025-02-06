@@ -136,11 +136,6 @@ module.exports = grammar(C, {
       $.static_assert_declaration,
       $.template_declaration,
       $.template_instantiation,
-      $.module_declaration,
-      $.export_declaration,
-      $.import_declaration,
-      $.global_module_fragment_declaration,
-      $.private_module_fragment_declaration,
       alias($.constructor_or_destructor_definition, $.function_definition),
       alias($.operator_cast_definition, $.function_definition),
       alias($.operator_cast_declaration, $.declaration),
@@ -334,25 +329,10 @@ module.exports = grammar(C, {
       repeat(seq('.', $.identifier)
       ),
     ),
+
     module_partition: $ => seq(
       ':',
       $.module_name,
-    ),
-    _exportable_item: $ => choice(
-      $.declaration,
-      $.function_definition,
-      $.template_declaration,
-      $.template_instantiation,
-      $.namespace_definition,
-      $.linkage_specification,
-      $.attributed_statement,
-      ';',
-      $.gnu_asm_expression,
-      $.using_declaration,
-      $.namespace_alias_definition,
-      $.static_assert_declaration,
-      $.alias_declaration,
-      seq($._type_specifier, ';'),
     ),
 
     module_declaration: $ => seq(
@@ -363,10 +343,12 @@ module.exports = grammar(C, {
       optional($.attribute_declaration),
       ';'
     ),
+
     export_declaration: $ => seq(
       'export',
-      choice($._exportable_item, seq('{', repeat($._exportable_item), '}'))
+      choice($._block_item, seq('{', repeat($._block_item), '}'))
     ),
+
     import_declaration: $ => seq(
       optional('export'),
       'import',
@@ -381,9 +363,9 @@ module.exports = grammar(C, {
       optional($.attribute_declaration),
       ';',
     ),
+
     global_module_fragment_declaration: _ => seq('module', ';'),
     private_module_fragment_declaration: _ => seq('module', ':', 'private', ';'),
-
 
     template_declaration: $ => seq(
       'template',
