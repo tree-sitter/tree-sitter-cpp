@@ -188,6 +188,11 @@ module.exports = grammar(C, {
 
     type_descriptor: (_, original) => prec.right(original),
 
+    attribute: ($, original) => seq(
+      optional(seq('using', field('namespace', $.identifier), ':')),
+      ...original.members,
+    ),
+
     // When used in a trailing return type, these specifiers can now occur immediately before
     // a compound statement. This introduces a shift/reduce conflict that needs to be resolved
     // with an associativity.
