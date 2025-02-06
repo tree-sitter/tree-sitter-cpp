@@ -3345,6 +3345,35 @@
               "type": "SEQ",
               "members": [
                 {
+                  "type": "STRING",
+                  "value": "using"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "namespace",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "identifier"
+                  }
+                },
+                {
+                  "type": "STRING",
+                  "value": ":"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
                   "type": "FIELD",
                   "name": "prefix",
                   "content": {
@@ -13811,6 +13840,13 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "attribute_declaration"
+          }
+        },
+        {
           "type": "STRING",
           "value": "using"
         },
@@ -17363,6 +17399,15 @@
     [
       "_declaration_modifiers",
       "attributed_statement"
+    ],
+    [
+      "_declaration_modifiers",
+      "using_declaration"
+    ],
+    [
+      "_declaration_modifiers",
+      "attributed_statement",
+      "using_declaration"
     ],
     [
       "_top_level_item",
