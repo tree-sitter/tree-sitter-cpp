@@ -65,6 +65,8 @@ module.exports = grammar(C, {
     [$.sized_type_specifier],
     [$.attributed_statement],
     [$._declaration_modifiers, $.attributed_statement],
+    [$._declaration_modifiers, $.using_declaration],
+    [$._declaration_modifiers, $.attributed_statement, $.using_declaration],
     [$._top_level_item, $._top_level_statement],
     [$._block_item, $.statement],
     [$.type_qualifier, $.extension_expression],
@@ -804,6 +806,7 @@ module.exports = grammar(C, {
     )),
 
     using_declaration: $ => seq(
+      repeat($.attribute_declaration),
       'using',
       optional(choice('namespace', 'enum')),
       choice(
