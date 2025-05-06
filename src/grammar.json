@@ -15047,6 +15047,27 @@
         }
       ]
     },
+    "lambda_specifiers": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "static"
+        },
+        {
+          "type": "STRING",
+          "value": "constexpr"
+        },
+        {
+          "type": "STRING",
+          "value": "consteval"
+        },
+        {
+          "type": "STRING",
+          "value": "mutable"
+        }
+      ]
+    },
     "lambda_declarator": {
       "type": "CHOICE",
       "members": [
@@ -15069,16 +15090,11 @@
               }
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "type_qualifier"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "lambda_specifiers"
+              }
             },
             {
               "type": "CHOICE",
@@ -17576,5 +17592,6 @@
     "_field_declarator",
     "_type_declarator",
     "_abstract_declarator"
-  ]
+  ],
+  "reserved": {}
 }
