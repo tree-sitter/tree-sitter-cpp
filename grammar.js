@@ -1141,12 +1141,19 @@ module.exports = grammar(C, {
       field('requirements', $.requirement_seq),
     ),
 
+    lambda_specifiers: $ => choice(
+      'static',
+      'constexpr',
+      'consteval',
+      'mutable'
+    ),
+
     lambda_declarator: $ => choice(
       // main declarator form, includes parameter list
       seq(
         repeat($.attribute_declaration),
         field('parameters', $.parameter_list),
-        optional($.type_qualifier),
+        repeat($.lambda_specifiers),
         optional($._function_exception_specification),
         repeat($.attribute_declaration),
         optional($.trailing_return_type),
