@@ -17595,6 +17595,5 @@
     "_field_declarator",
     "_type_declarator",
     "_abstract_declarator"
-  ],
-  "reserved": {}
+  ]
 }
