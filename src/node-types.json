@@ -3999,7 +3999,7 @@
           "named": true
         },
         {
-          "type": "lambda_specifiers",
+          "type": "lambda_specifier",
           "named": true
         },
         {
@@ -4087,7 +4087,7 @@
     }
   },
   {
-    "type": "lambda_specifiers",
+    "type": "lambda_specifier",
     "named": true,
     "fields": {}
   },

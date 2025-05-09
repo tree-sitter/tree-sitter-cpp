@@ -15047,7 +15047,7 @@
         }
       ]
     },
-    "lambda_specifiers": {
+    "lambda_specifier": {
       "type": "CHOICE",
       "members": [
         {
@@ -15093,7 +15093,7 @@
               "type": "REPEAT",
               "content": {
                 "type": "SYMBOL",
-                "name": "lambda_specifiers"
+                "name": "lambda_specifier"
               }
             },
             {
