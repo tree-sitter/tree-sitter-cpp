@@ -1174,7 +1174,7 @@ module.exports = grammar(C, {
       ),
       seq(
         repeat($.attribute_declaration),
-        $.type_qualifier,
+        repeat1($.lambda_specifier),
         optional($._function_exception_specification),
         repeat($.attribute_declaration),
         optional($.trailing_return_type),

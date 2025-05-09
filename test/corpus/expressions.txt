@@ -502,7 +502,7 @@ auto f = [](int i) consteval static noexcept -> int { return i + 1; }(5);
               (type_identifier)
               (initializer_list))))
         (lambda_declarator
-          (type_qualifier))
+          (lambda_specifier))
         (compound_statement))))
   (declaration
     (placeholder_type_specifier
