@@ -15210,8 +15210,11 @@
               }
             },
             {
-              "type": "SYMBOL",
-              "name": "type_qualifier"
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "lambda_specifier"
+              }
             },
             {
               "type": "CHOICE",

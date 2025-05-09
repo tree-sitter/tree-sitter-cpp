@@ -4017,10 +4017,6 @@
         {
           "type": "trailing_return_type",
           "named": true
-        },
-        {
-          "type": "type_qualifier",
-          "named": true
         }
       ]
     }
