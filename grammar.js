@@ -1145,7 +1145,7 @@ module.exports = grammar(C, {
       'static',
       'constexpr',
       'consteval',
-      'mutable'
+      'mutable',
     ),
 
     lambda_declarator: $ => choice(
