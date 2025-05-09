@@ -308,6 +308,8 @@ auto f = [s = S{}] mutable {};
 
 auto f = [] [[noreturn]] (int i) { throw 1; };
 
+auto f = [](int i) consteval static noexcept -> int { return i + 1; }(5);
+
 --------------------------------------------------------------------------------
 
 (translation_unit
@@ -421,7 +423,7 @@ auto f = [] [[noreturn]] (int i) { throw 1; };
                 (auto))
               (reference_declarator
                 (identifier))))
-          (type_qualifier))
+          (lambda_specifier))
         (compound_statement
           (return_statement
             (call_expression
@@ -500,7 +502,7 @@ auto f = [] [[noreturn]] (int i) { throw 1; };
               (type_identifier)
               (initializer_list))))
         (lambda_declarator
-          (type_qualifier))
+          (lambda_specifier))
         (compound_statement))))
   (declaration
     (placeholder_type_specifier
@@ -519,7 +521,33 @@ auto f = [] [[noreturn]] (int i) { throw 1; };
               (identifier))))
         (compound_statement
           (throw_statement
-            (number_literal)))))))
+                (number_literal))))))
+      (declaration
+        (placeholder_type_specifier
+          (auto))
+        (init_declarator
+          (identifier)
+          (call_expression
+            (lambda_expression
+              (lambda_capture_specifier)
+              (lambda_declarator
+                (parameter_list
+                  (parameter_declaration
+                    (primitive_type)
+                    (identifier)))
+                (lambda_specifier)
+                (lambda_specifier)
+                (noexcept)
+                (trailing_return_type
+                  (type_descriptor
+                    (primitive_type))))
+              (compound_statement
+                (return_statement
+                  (binary_expression
+                    (identifier)
+                    (number_literal)))))
+            (argument_list
+              (number_literal))))))
 
 ================================================================================
 Nested template calls
