@@ -423,7 +423,7 @@ auto f = [](int i) consteval static noexcept -> int { return i + 1; }(5);
                 (auto))
               (reference_declarator
                 (identifier))))
-          (lambda_specifiers))
+          (lambda_specifier))
         (compound_statement
           (return_statement
             (call_expression
@@ -535,8 +535,8 @@ auto f = [](int i) consteval static noexcept -> int { return i + 1; }(5);
                   (parameter_declaration
                     (primitive_type)
                     (identifier)))
-                (lambda_specifiers)
-                (lambda_specifiers)
+                (lambda_specifier)
+                (lambda_specifier)
                 (noexcept)
                 (trailing_return_type
                   (type_descriptor

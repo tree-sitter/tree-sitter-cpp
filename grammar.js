@@ -1141,7 +1141,7 @@ module.exports = grammar(C, {
       field('requirements', $.requirement_seq),
     ),
 
-    lambda_specifiers: $ => choice(
+    lambda_specifier: $ => choice(
       'static',
       'constexpr',
       'consteval',
@@ -1153,7 +1153,7 @@ module.exports = grammar(C, {
       seq(
         repeat($.attribute_declaration),
         field('parameters', $.parameter_list),
-        repeat($.lambda_specifiers),
+        repeat($.lambda_specifier),
         optional($._function_exception_specification),
         repeat($.attribute_declaration),
         optional($.trailing_return_type),
