@@ -252,6 +252,7 @@ module.exports = grammar(C, {
         seq(
           // C uses _declaration_declarator here for some nice macro parsing in function declarators,
           // but this causes a world of pain for C++ so we'll just stick to the normal _declarator here.
+          optional($.ms_call_modifier),
           $._declarator,
           optional($.gnu_asm_expression),
         ),
