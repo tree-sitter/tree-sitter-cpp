@@ -12,6 +12,7 @@ union __declspec(noinline) u2 {
 class __declspec(uuid) u2 {
 };
 
+int __cdecl f2();
 ---
 
 (translation_unit
@@ -29,4 +30,10 @@ class __declspec(uuid) u2 {
     (ms_declspec_modifier
       (identifier))
     name: (type_identifier)
-    body: (field_declaration_list)))
+    body: (field_declaration_list))
+  (declaration
+    type: (primitive_type)
+    declarator: (ms_call_modifier)
+    declarator: (function_declarator
+      declarator: (identifier)
+      parameters: (parameter_list))))
