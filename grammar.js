@@ -394,12 +394,13 @@ module.exports = grammar(C, {
       ),
     ),
 
-    template_instantiation: $ => seq(
+    template_instantiation: $ => prec(1, seq(
+      optional('extern'),
       'template',
       optional($._declaration_specifiers),
       field('declarator', $._declarator),
       ';',
-    ),
+    )),
 
     template_parameter_list: $ => seq(
       '<',
