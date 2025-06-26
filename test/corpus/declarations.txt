@@ -1431,6 +1431,8 @@ Explicit template instantiations
 
 template A<int, bool>::A(char *, size_t);
 
+extern template int Foo::foo<int>();
+
 --------------------------------------------------------------------------------
 
 (translation_unit
@@ -1450,7 +1452,18 @@ template A<int, bool>::A(char *, size_t);
           (primitive_type)
           (abstract_pointer_declarator))
         (parameter_declaration
-          (primitive_type))))))
+          (primitive_type)))))
+  (template_instantiation
+    (primitive_type)
+    (function_declarator
+      (qualified_identifier
+        (namespace_identifier)
+        (template_function
+          (identifier)
+          (template_argument_list
+            (type_descriptor
+              (primitive_type)))))
+      (parameter_list))))
 
 ================================================================================
 Structured binding declarations
