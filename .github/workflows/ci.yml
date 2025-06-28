@@ -38,7 +38,7 @@ jobs:
           repository: tree-sitter/tree-sitter-c
           path: node_modules/tree-sitter-c
           sparse-checkout: queries/
-          ref: v0.23.1
+          ref: v0.23.6
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
       - name: Run tests
@@ -49,6 +49,7 @@ jobs:
           test-python: true
           test-go: true
           test-swift: true
+          abi-version: 14
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
