@@ -2035,6 +2035,10 @@
             "named": true
           },
           {
+            "type": "ms_call_modifier",
+            "named": true
+          },
+          {
             "type": "operator_cast",
             "named": true
           }
