@@ -887,6 +887,7 @@ module.exports = grammar(C, {
       $.co_return_statement,
       $.co_yield_statement,
       $.for_range_loop,
+      $.expansion_statement,
       $.try_statement,
       $.throw_statement,
     ),
@@ -896,6 +897,7 @@ module.exports = grammar(C, {
       $.co_return_statement,
       $.co_yield_statement,
       $.for_range_loop,
+      $.expansion_statement,
       $.try_statement,
       $.throw_statement,
     ),
@@ -1479,6 +1481,14 @@ module.exports = grammar(C, {
       $.splice_specifier,
       seq('template', $._splice_specialization_specifier),
     )),
+
+    expansion_statement: $ => seq(
+      'template', 'for',
+      '(',
+      $._for_range_loop_body,
+      ')',
+      field('body', $.statement),
+    ),
 
     operator_name: $ => prec(1, seq(
       'operator',
