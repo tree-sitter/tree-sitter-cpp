@@ -836,3 +836,100 @@ consteval { TCls<void>::sfn(); }
                   (primitive_type))))
             (identifier))
           (argument_list))))))
+
+================================================================================
+Annotations
+================================================================================
+
+[[=1]] void f();
+[[=2, =3]] void g();
+void g [[=4]] [[=2]] ();
+
+template <class T>
+[[=T::type()]] void f(T t);
+
+struct Option { bool value; };
+struct C {
+    [[=Option{true}]] int a;
+    [[=Option{false}]] int b;
+};
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (declaration
+    (attribute_declaration
+      (annotation
+        (number_literal)))
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list)))
+  (declaration
+    (attribute_declaration
+      (annotation
+        (number_literal))
+      (annotation
+        (number_literal)))
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list)))
+  (declaration
+    (primitive_type)
+    (function_declarator
+      (attributed_declarator
+        (identifier)
+        (attribute_declaration
+          (annotation
+            (number_literal)))
+        (attribute_declaration
+          (annotation
+            (number_literal))))
+      (parameter_list)))
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (declaration
+      (attribute_declaration
+        (annotation
+          (call_expression
+            (qualified_identifier
+              (namespace_identifier)
+              (identifier))
+            (argument_list))))
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list
+          (parameter_declaration
+            (type_identifier)
+            (identifier))))))
+  (struct_specifier
+    (type_identifier)
+    (field_declaration_list
+      (field_declaration
+        (primitive_type)
+        (field_identifier))))
+  (struct_specifier
+    (type_identifier)
+    (field_declaration_list
+      (field_declaration
+        (attribute_declaration
+          (annotation
+            (compound_literal_expression
+              (type_identifier)
+              (initializer_list
+                (true)))))
+        (primitive_type)
+        (field_identifier))
+      (field_declaration
+        (attribute_declaration
+          (annotation
+            (compound_literal_expression
+              (type_identifier)
+              (initializer_list
+                (false)))))
+        (primitive_type)
+        (field_identifier)))))
