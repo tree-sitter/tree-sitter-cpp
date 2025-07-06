@@ -933,3 +933,39 @@ struct C {
                 (false)))))
         (primitive_type)
         (field_identifier)))))
+
+================================================================================
+Expansion statements
+================================================================================
+
+template for (auto const& c : {Containers...}) {}
+template for (constexpr int I : std::views::iota(0zu, sizeof...(Ts))) {}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (expansion_statement
+    (placeholder_type_specifier
+      (auto))
+    (type_qualifier)
+    (reference_declarator
+      (identifier))
+    (initializer_list
+      (parameter_pack_expansion
+        (identifier)))
+    (compound_statement))
+  (expansion_statement
+    (type_qualifier)
+    (primitive_type)
+    (identifier)
+    (call_expression
+      (qualified_identifier
+        (namespace_identifier)
+        (qualified_identifier
+          (namespace_identifier)
+          (identifier)))
+      (argument_list
+        (number_literal)
+        (sizeof_expression
+          (identifier))))
+    (compound_statement)))
