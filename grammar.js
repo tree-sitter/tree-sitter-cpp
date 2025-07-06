@@ -206,6 +206,13 @@ module.exports = grammar(C, {
       ...original.members,
     ),
 
+    annotation: $ => seq('=', $.expression),
+
+    attribute_declaration: ($, original) => choice(
+      original,
+      seq('[[', commaSep1($.annotation), ']]'),
+    ),
+
     // When used in a trailing return type, these specifiers can now occur immediately before
     // a compound statement. This introduces a shift/reduce conflict that needs to be resolved
     // with an associativity.
