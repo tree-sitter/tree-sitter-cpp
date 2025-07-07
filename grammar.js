@@ -146,7 +146,11 @@ module.exports = grammar(C, {
     // Types
 
     placeholder_type_specifier: $ => prec(1, seq(
-      field('constraint', optional($.type_specifier)),
+      field('constraint', optional(choice(
+        alias($.qualified_type_identifier, $.qualified_identifier),
+        $._type_identifier,
+        $.template_type,
+      ))),
       choice($.auto, alias($.decltype_auto, $.decltype)),
     )),
 
@@ -448,11 +452,17 @@ module.exports = grammar(C, {
       '(',
       commaSep(choice(
         $.parameter_declaration,
+        $.explicit_object_parameter_declaration,
         $.optional_parameter_declaration,
         $.variadic_parameter_declaration,
         '...',
       )),
       ')',
+    ),
+
+    explicit_object_parameter_declaration: $ => seq(
+      $.this,
+      $.parameter_declaration
     ),
 
     optional_parameter_declaration: $ => seq(
