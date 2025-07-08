@@ -253,6 +253,7 @@ struct S {
   S() : f(0) {}
 
  private:
+  int getF0(this S &self) { return self.f; }
   int getF1() const { return f; }
   int getF2() const try { throw 1; } catch (...) { return f; }
 };
@@ -277,6 +278,22 @@ struct S {
               (number_literal))))
         (compound_statement))
       (access_specifier)
+      (function_definition
+        (primitive_type)
+        (function_declarator
+          (field_identifier)
+          (parameter_list
+            (explicit_object_parameter_declaration
+              (this)
+              (parameter_declaration
+                (type_identifier)
+                (reference_declarator
+                  (identifier))))))
+        (compound_statement
+          (return_statement
+            (field_expression
+              (identifier)
+              (field_identifier)))))
       (function_definition
         (primitive_type)
         (function_declarator
