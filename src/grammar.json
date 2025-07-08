@@ -6032,6 +6032,10 @@
                     },
                     {
                       "type": "SYMBOL",
+                      "name": "explicit_object_parameter_declaration"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "optional_parameter_declaration"
                     },
                     {
@@ -6059,6 +6063,10 @@
                           {
                             "type": "SYMBOL",
                             "name": "parameter_declaration"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "explicit_object_parameter_declaration"
                           },
                           {
                             "type": "SYMBOL",
@@ -11095,8 +11103,26 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "type_specifier"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "qualified_type_identifier"
+                      },
+                      "named": true,
+                      "value": "qualified_identifier"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "template_type"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_type_identifier"
+                    }
+                  ]
                 },
                 {
                   "type": "BLANK"
@@ -12310,6 +12336,19 @@
               "name": "optional_type_parameter_declaration"
             }
           ]
+        }
+      ]
+    },
+    "explicit_object_parameter_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "this"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parameter_declaration"
         }
       ]
     },

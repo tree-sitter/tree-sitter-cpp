@@ -2474,6 +2474,25 @@
     }
   },
   {
+    "type": "explicit_object_parameter_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "parameter_declaration",
+          "named": true
+        },
+        {
+          "type": "this",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "export_declaration",
     "named": true,
     "fields": {},
@@ -4693,6 +4712,10 @@
       "required": false,
       "types": [
         {
+          "type": "explicit_object_parameter_declaration",
+          "named": true
+        },
+        {
           "type": "optional_parameter_declaration",
           "named": true
         },
@@ -4790,7 +4813,15 @@
         "required": false,
         "types": [
           {
-            "type": "type_specifier",
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "template_type",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
             "named": true
           }
         ]
