@@ -96,6 +96,7 @@ module.exports = grammar(C, {
     [$.expression_statement, $._for_statement_body],
     [$.init_statement, $._for_statement_body],
     [$.field_expression, $.template_method, $.template_type],
+    [$.field_expression, $.template_method],
     [$.qualified_field_identifier, $.template_method, $.template_type],
   ],
 
@@ -1083,6 +1084,7 @@ module.exports = grammar(C, {
         $.destructor_name,
         $.template_method,
         alias($.dependent_field_identifier, $.dependent_name),
+        $.operator_name,
       )),
     ),
 
