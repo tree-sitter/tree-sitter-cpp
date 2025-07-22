@@ -618,3 +618,37 @@ void foo(int a) {
           (case_statement
             (co_yield_statement
               (identifier))))))))
+
+================================================================================
+Explicit calls to overloaded operators
+================================================================================
+
+void foo() {
+  obj.operator->("arg");
+  obj.operator==(4);
+}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list))
+    (compound_statement
+      (expression_statement
+        (call_expression
+          (field_expression
+            (identifier)
+            (operator_name))
+          (argument_list
+            (string_literal
+              (string_content)))))
+      (expression_statement
+        (call_expression
+          (field_expression
+            (identifier)
+            (operator_name))
+          (argument_list
+            (number_literal)))))))
