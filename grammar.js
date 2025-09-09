@@ -14,6 +14,7 @@ const C = require('tree-sitter-c/grammar');
 
 const PREC = Object.assign(C.PREC, {
   LAMBDA: 18,
+  REFLECT: 19,
   NEW: C.PREC.CALL + 1,
   STRUCTURED_BINDING: -1,
   THREE_WAY: C.PREC.RELATIONAL + 1,
@@ -75,6 +76,7 @@ module.exports = grammar(C, {
     [$.template_function, $.template_type],
     [$.template_function, $.template_type, $.expression],
     [$.template_function, $.template_type, $.qualified_identifier],
+    [$.template_function, $.template_type, $.qualified_identifier, $.qualified_type_identifier],
     [$.template_type, $.qualified_type_identifier],
     [$.qualified_type_identifier, $.qualified_identifier],
     [$.comma_expression, $.initializer_list],
@@ -97,6 +99,8 @@ module.exports = grammar(C, {
     [$.init_statement, $._for_statement_body],
     [$.field_expression, $.template_method, $.template_type],
     [$.qualified_field_identifier, $.template_method, $.template_type],
+    [$.type_specifier, $.template_type, $.template_function, $.expression],
+    [$.splice_type_specifier, $.splice_expression],
   ],
 
   inline: ($, original) => original.concat([
@@ -117,6 +121,7 @@ module.exports = grammar(C, {
       $.using_declaration,
       $.alias_declaration,
       $.static_assert_declaration,
+      $.consteval_block_declaration,
       $.template_declaration,
       $.template_instantiation,
       $.module_declaration,
@@ -136,6 +141,7 @@ module.exports = grammar(C, {
       $.using_declaration,
       $.alias_declaration,
       $.static_assert_declaration,
+      $.consteval_block_declaration,
       $.template_declaration,
       $.template_instantiation,
       alias($.constructor_or_destructor_definition, $.function_definition),
@@ -177,6 +183,7 @@ module.exports = grammar(C, {
       $.primitive_type,
       $.template_type,
       $.dependent_type,
+      $.splice_type_specifier,
       $.placeholder_type_specifier,
       $.decltype,
       prec.right(choice(
@@ -197,6 +204,13 @@ module.exports = grammar(C, {
     attribute: ($, original) => seq(
       optional(seq('using', field('namespace', $.identifier), ':')),
       ...original.members,
+    ),
+
+    annotation: $ => seq('=', $.expression),
+
+    attribute_declaration: ($, original) => choice(
+      original,
+      seq('[[', commaSep1($.annotation), ']]'),
     ),
 
     // When used in a trailing return type, these specifiers can now occur immediately before
@@ -239,6 +253,7 @@ module.exports = grammar(C, {
     _class_name: $ => prec.right(choice(
       $._type_identifier,
       $.template_type,
+      $.splice_type_specifier,
       alias($.qualified_type_identifier, $.qualified_identifier),
     )),
 
@@ -540,6 +555,7 @@ module.exports = grammar(C, {
       $.using_declaration,
       $.type_definition,
       $.static_assert_declaration,
+      $.consteval_block_declaration,
       ';',
     ),
 
@@ -799,6 +815,7 @@ module.exports = grammar(C, {
       choice(
         $._namespace_identifier,
         $.nested_namespace_specifier,
+        $.splice_specifier,
       ),
       ';',
     ),
@@ -824,6 +841,7 @@ module.exports = grammar(C, {
       choice(
         $.identifier,
         $.qualified_identifier,
+        $.splice_type_specifier,
       ),
       ';',
     ),
@@ -849,6 +867,11 @@ module.exports = grammar(C, {
       ';',
     ),
 
+    consteval_block_declaration: $ => seq(
+      'consteval',
+      field('body', $.compound_statement),
+    ),
+
     concept_definition: $ => seq(
       'concept',
       field('name', $.identifier),
@@ -864,6 +887,7 @@ module.exports = grammar(C, {
       $.co_return_statement,
       $.co_yield_statement,
       $.for_range_loop,
+      $.expansion_statement,
       $.try_statement,
       $.throw_statement,
     ),
@@ -873,6 +897,7 @@ module.exports = grammar(C, {
       $.co_return_statement,
       $.co_yield_statement,
       $.for_range_loop,
+      $.expansion_statement,
       $.try_statement,
       $.throw_statement,
     ),
@@ -1002,6 +1027,8 @@ module.exports = grammar(C, {
       $.this,
       $.user_defined_literal,
       $.fold_expression,
+      $.reflect_expression,
+      $.splice_expression,
     ),
 
     _string: $ => choice(
@@ -1036,10 +1063,13 @@ module.exports = grammar(C, {
       ']',
     ),
 
-    call_expression: ($, original) => choice(original, seq(
-      field('function', $.primitive_type),
+    call_expression: ($, original) => prec.dynamic(1, choice(original, seq(
+      field('function', choice($.primitive_type, seq(
+        optional('typename'),
+        $.splice_type_specifier,
+      ))),
       field('arguments', $.argument_list),
-    )),
+    ))),
 
     co_await_expression: $ => prec.left(PREC.UNARY, seq(
       field('operator', 'co_await'),
@@ -1083,6 +1113,7 @@ module.exports = grammar(C, {
         $.destructor_name,
         $.template_method,
         alias($.dependent_field_identifier, $.dependent_name),
+        $.splice_expression,
       )),
     ),
 
@@ -1338,7 +1369,10 @@ module.exports = grammar(C, {
     compound_literal_expression: ($, original) => choice(
       original,
       seq(
-        field('type', choice($._class_name, $.primitive_type)),
+        field('type', choice(
+          $._class_name,
+          $.primitive_type,
+          seq(optional('typename'), $.splice_type_specifier))),
         field('value', $.initializer_list),
       ),
     ),
@@ -1352,6 +1386,8 @@ module.exports = grammar(C, {
         $._namespace_identifier,
         $.template_type,
         $.decltype,
+        $.splice_expression,
+        $.splice_type_specifier,
         alias($.dependent_type_identifier, $.dependent_name),
       ))),
       '::',
@@ -1363,7 +1399,7 @@ module.exports = grammar(C, {
         alias($.dependent_field_identifier, $.dependent_name),
         alias($.qualified_field_identifier, $.qualified_identifier),
         $.template_method,
-        prec.dynamic(1, $._field_identifier),
+        prec.dynamic(2, $._field_identifier),
       )),
     ),
 
@@ -1373,7 +1409,7 @@ module.exports = grammar(C, {
         alias($.dependent_identifier, $.dependent_name),
         $.qualified_identifier,
         $.template_function,
-        seq(optional('template'), $.identifier),
+        prec.dynamic(1, seq(optional('template'), $.identifier)),
         $.operator_name,
         $.destructor_name,
         $.pointer_type_declarator,
@@ -1386,7 +1422,7 @@ module.exports = grammar(C, {
         alias($.dependent_type_identifier, $.dependent_name),
         alias($.qualified_type_identifier, $.qualified_identifier),
         $.template_type,
-        $._type_identifier,
+        prec.dynamic(1, $._type_identifier),
       )),
     ),
 
@@ -1421,6 +1457,36 @@ module.exports = grammar(C, {
     parenthesized_expression: ($, original) => choice(
       original,
       seq('(', alias($._assignment_expression_lhs, $.assignment_expression), ')'),
+    ),
+
+    reflect_expression: $ => prec.right(PREC.REFLECT, seq(
+      '^^',
+      choice(
+        '::',
+        $.expression,
+        $.type_descriptor,
+      ),
+    )),
+
+    splice_specifier: $ => seq( '[:', $.expression, ':]'),
+    _splice_specialization_specifier: $ => seq($.splice_specifier, $.template_argument_list),
+
+    splice_type_specifier: $ => prec.right(choice(
+      $.splice_specifier,
+      $._splice_specialization_specifier,
+    )),
+
+    splice_expression: $ => prec.right(choice(
+      $.splice_specifier,
+      seq('template', $._splice_specialization_specifier),
+    )),
+
+    expansion_statement: $ => seq(
+      'template', 'for',
+      '(',
+      $._for_range_loop_body,
+      ')',
+      field('body', $.statement),
     ),
 
     operator_name: $ => prec(1, seq(
