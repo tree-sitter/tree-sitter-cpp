@@ -9526,6 +9526,10 @@
                 },
                 "named": true,
                 "value": "dependent_name"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "operator_name"
               }
             ]
           }
@@ -17618,6 +17622,10 @@
       "field_expression",
       "template_method",
       "template_type"
+    ],
+    [
+      "field_expression",
+      "template_method"
     ],
     [
       "qualified_field_identifier",
