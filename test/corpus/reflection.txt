@@ -1,0 +1,971 @@
+================================================================================
+Reflection operator
+================================================================================
+static_assert(std::meta::is_type(^^int()));
+static_assert(std::meta::is_namespace(^^::));
+
+template<bool> struct X {};
+consteval bool operator<(std::meta::info, X<false>) { return false; }
+consteval void g(std::meta::info r, X<false> xv) {
+  r == (^^int) && true;
+  (^^X) < xv;
+  ^^X<true> < xv;
+}
+
+constexpr std::meta::info r1 = ^^A;
+constexpr std::meta::info r2 = ^^B::C;
+
+template <typename T> void fn() requires (^^T == ^^int);
+
+constexpr std::meta::info a = ^^fn<char>;
+constexpr std::meta::info b = ^^std::vector;
+
+template <typename T>
+struct S {
+  static constexpr std::meta::info r = ^^T;
+  using type = T;
+};
+static_assert(S<int>::r == ^^int);
+static_assert(^^S<int>::type != ^^int);
+
+constexpr T obj{.r=^^::};
+
+constexpr std::meta::info yeti = ^^void(int) const &;
+add_member(^^char const *);
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (static_assert_declaration
+    (call_expression
+      (qualified_identifier
+        (namespace_identifier)
+        (qualified_identifier
+          (namespace_identifier)
+          (identifier)))
+      (argument_list
+        (reflect_expression
+          (call_expression
+            (primitive_type)
+            (argument_list))))))
+  (static_assert_declaration
+    (call_expression
+      (qualified_identifier
+        (namespace_identifier)
+        (qualified_identifier
+          (namespace_identifier)
+          (identifier)))
+      (argument_list
+        (reflect_expression))))
+  (template_declaration
+    (template_parameter_list
+      (parameter_declaration
+        (primitive_type)))
+    (struct_specifier
+      (type_identifier)
+      (field_declaration_list)))
+  (function_definition
+    (type_qualifier)
+    (primitive_type)
+    (function_declarator
+      (operator_name)
+      (parameter_list
+        (parameter_declaration
+          (qualified_identifier
+            (namespace_identifier)
+            (qualified_identifier
+              (namespace_identifier)
+              (type_identifier))))
+        (parameter_declaration
+          (template_type
+            (type_identifier)
+            (template_argument_list
+              (false))))))
+    (compound_statement
+      (return_statement
+        (false))))
+  (function_definition
+    (type_qualifier)
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list
+        (parameter_declaration
+          (qualified_identifier
+            (namespace_identifier)
+            (qualified_identifier
+              (namespace_identifier)
+              (type_identifier)))
+          (identifier))
+        (parameter_declaration
+          (template_type
+            (type_identifier)
+            (template_argument_list
+              (false)))
+          (identifier))))
+    (compound_statement
+      (expression_statement
+        (binary_expression
+          (binary_expression
+            (identifier)
+            (parenthesized_expression
+              (reflect_expression
+                (type_descriptor
+                  (primitive_type)))))
+          (true)))
+      (expression_statement
+        (binary_expression
+          (parenthesized_expression
+            (reflect_expression
+              (identifier)))
+          (identifier)))
+      (expression_statement
+        (binary_expression
+          (reflect_expression
+            (type_descriptor
+              (template_type
+                (type_identifier)
+                (template_argument_list
+                  (true)))))
+          (identifier)))))
+  (declaration
+    (type_qualifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (qualified_identifier
+        (namespace_identifier)
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (reflect_expression
+        (identifier))))
+  (declaration
+    (type_qualifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (qualified_identifier
+        (namespace_identifier)
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (reflect_expression
+        (type_descriptor
+          (qualified_identifier
+            (namespace_identifier)
+            (type_identifier))))))
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (declaration
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list)
+        (requires_clause
+          (binary_expression
+            (reflect_expression
+              (type_descriptor
+                (type_identifier)))
+            (reflect_expression
+              (type_descriptor
+                (primitive_type))))))))
+  (declaration
+    (type_qualifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (qualified_identifier
+        (namespace_identifier)
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (reflect_expression
+        (template_function
+          (identifier)
+          (template_argument_list
+            (type_descriptor
+              (primitive_type)))))))
+  (declaration
+    (type_qualifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (qualified_identifier
+        (namespace_identifier)
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (reflect_expression
+        (type_descriptor
+          (qualified_identifier
+            (namespace_identifier)
+            (type_identifier))))))
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (struct_specifier
+      (type_identifier)
+      (field_declaration_list
+        (field_declaration
+          (storage_class_specifier)
+          (type_qualifier)
+          (qualified_identifier
+            (namespace_identifier)
+            (qualified_identifier
+              (namespace_identifier)
+              (type_identifier)))
+          (field_identifier)
+          (reflect_expression
+            (identifier)))
+        (alias_declaration
+          (type_identifier)
+          (type_descriptor
+            (type_identifier))))))
+  (static_assert_declaration
+    (binary_expression
+      (qualified_identifier
+        (template_type
+          (type_identifier)
+          (template_argument_list
+            (type_descriptor
+              (primitive_type))))
+        (identifier))
+      (reflect_expression
+        (type_descriptor
+          (primitive_type)))))
+  (static_assert_declaration
+    (binary_expression
+      (reflect_expression
+        (type_descriptor
+          (qualified_identifier
+            (template_type
+              (type_identifier)
+              (template_argument_list
+                (type_descriptor
+                  (primitive_type))))
+            (type_identifier))))
+      (reflect_expression
+        (type_descriptor
+          (primitive_type)))))
+  (declaration
+    (type_qualifier)
+    (type_identifier)
+    (init_declarator
+      (identifier)
+      (initializer_list
+        (initializer_pair
+          (field_designator
+            (field_identifier))
+          (reflect_expression)))))
+  (declaration
+    (type_qualifier)
+    (qualified_identifier
+      (namespace_identifier)
+      (qualified_identifier
+        (namespace_identifier)
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (reflect_expression
+        (type_descriptor
+          (primitive_type)
+          (abstract_function_declarator
+            (parameter_list
+              (parameter_declaration
+                (primitive_type)))
+            (type_qualifier)
+            (ref_qualifier))))))
+  (expression_statement
+    (call_expression
+      (identifier)
+      (argument_list
+        (reflect_expression
+          (type_descriptor
+            (primitive_type)
+            (type_qualifier)
+            (abstract_pointer_declarator)))))))
+
+
+================================================================================
+Splice type specifiers and requirements
+================================================================================
+
+using alias = [:^^TCls:]<([:^^v:])>;
+using enum [:^^Enum:];
+using namespace [:^^:::];
+namespace global = [:^^:::];
+
+int o1 = [:^^S::x:];
+auto o2 = typename [:^^TCls:]<([:^^v:])>();
+int S::*k = &[:^^S::m:];
+int v1 = [:^^TCls<1>:]::s;
+int v2 = template [:^^TCls:]<2>::s;
+typename [:^^TCls:]<3>::type v3 = 3;
+template [:^^TCls:]<3>::type v4 = 4;
+typename template [:^^TCls:]<3>::type v5 = 5;
+
+template <typename T>
+concept C = requires {
+  typename [:T::r1:];
+  typename [:T::r2:]<int>;
+};
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (alias_declaration
+    (type_identifier)
+    (type_descriptor
+      (splice_type_specifier
+        (splice_specifier
+          (reflect_expression
+            (identifier)))
+        (template_argument_list
+          (parenthesized_expression
+            (splice_expression
+              (splice_specifier
+                (reflect_expression
+                  (identifier)))))))))
+  (using_declaration
+    (splice_type_specifier
+      (splice_specifier
+        (reflect_expression
+          (identifier)))))
+  (using_declaration
+    (splice_type_specifier
+      (splice_specifier
+        (reflect_expression))))
+  (namespace_alias_definition
+    (namespace_identifier)
+    (splice_specifier
+      (reflect_expression)))
+  (declaration
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (splice_expression
+        (splice_specifier
+          (reflect_expression
+            (type_descriptor
+              (qualified_identifier
+                (namespace_identifier)
+                (type_identifier))))))))
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (call_expression
+        (splice_type_specifier
+          (splice_specifier
+            (reflect_expression
+              (identifier)))
+          (template_argument_list
+            (parenthesized_expression
+              (splice_expression
+                (splice_specifier
+                  (reflect_expression
+                    (identifier)))))))
+        (argument_list))))
+  (declaration
+    (primitive_type)
+    (init_declarator
+      (qualified_identifier
+        (namespace_identifier)
+        (pointer_type_declarator
+          (type_identifier)))
+      (pointer_expression
+        (splice_expression
+          (splice_specifier
+            (reflect_expression
+              (type_descriptor
+                (qualified_identifier
+                  (namespace_identifier)
+                  (type_identifier)))))))))
+  (declaration
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (qualified_identifier
+        (splice_type_specifier
+          (splice_specifier
+            (reflect_expression
+              (template_function
+                (identifier)
+                (template_argument_list
+                  (number_literal))))))
+        (identifier))))
+  (declaration
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (qualified_identifier
+        (splice_expression
+          (splice_specifier
+            (reflect_expression
+              (identifier)))
+          (template_argument_list
+            (number_literal)))
+        (identifier))))
+  (declaration
+    (dependent_type
+      (qualified_identifier
+        (splice_type_specifier
+          (splice_specifier
+            (reflect_expression
+              (identifier)))
+          (template_argument_list
+            (number_literal)))
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (number_literal)))
+  (declaration
+    (qualified_identifier
+      (splice_expression
+        (splice_specifier
+          (reflect_expression
+            (identifier)))
+        (template_argument_list
+          (number_literal)))
+      (type_identifier))
+    (init_declarator
+      (identifier)
+      (number_literal)))
+  (declaration
+    (dependent_type
+      (qualified_identifier
+        (splice_expression
+          (splice_specifier
+            (reflect_expression
+              (identifier)))
+          (template_argument_list
+            (number_literal)))
+        (type_identifier)))
+    (init_declarator
+      (identifier)
+      (number_literal)))
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (concept_definition
+      (identifier)
+      (requires_expression
+        (requirement_seq
+          (type_requirement
+            (splice_type_specifier
+              (splice_specifier
+                (qualified_identifier
+                  (namespace_identifier)
+                  (identifier)))))
+          (simple_requirement)
+          (type_requirement
+            (splice_type_specifier
+              (splice_specifier
+                (qualified_identifier
+                  (namespace_identifier)
+                  (identifier)))
+              (template_argument_list
+                (type_descriptor
+                  (primitive_type)))))
+          (simple_requirement))))))
+
+================================================================================
+Splice expressions
+================================================================================
+
+constexpr int c = [:^^S:]::a;
+
+constexpr int d = template [:^^TCls:]<int>::b;
+
+template <auto V> constexpr int e = [:V:];
+constexpr int f = template [:^^e:]<^^S::a>;
+
+constexpr auto g = typename [:^^int:](42);
+constexpr auto h = typename [:^^int:]{42};
+constexpr auto j = e<([:^^h:])>;
+
+[:^^A::f:](3, 4);
+T* p4 = template [:r:]<200>();
+S<[:r:] + 1> s3;
+
+template <auto T, auto NS>
+void fn() {
+  using a = [:T:]<1>;
+  static_assert([:NS:]::template TCls<1>::v == a::v);
+}
+
+fn<^^N::TCls, ^^N>();
+
+int v1 = base_.[:fields[I]:];
+int v2 = base_->[:fields[I]:];
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (declaration
+    (type_qualifier)
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (qualified_identifier
+        (splice_type_specifier
+          (splice_specifier
+            (reflect_expression
+              (identifier))))
+        (identifier))))
+  (declaration
+    (type_qualifier)
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (qualified_identifier
+        (splice_expression
+          (splice_specifier
+            (reflect_expression
+              (identifier)))
+          (template_argument_list
+            (type_descriptor
+              (primitive_type))))
+        (identifier))))
+  (template_declaration
+    (template_parameter_list
+      (parameter_declaration
+        (placeholder_type_specifier
+          (auto))
+        (identifier)))
+    (declaration
+      (type_qualifier)
+      (primitive_type)
+      (init_declarator
+        (identifier)
+        (splice_expression
+          (splice_specifier
+            (identifier))))))
+  (declaration
+    (type_qualifier)
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (splice_expression
+        (splice_specifier
+          (reflect_expression
+            (identifier)))
+        (template_argument_list
+          (reflect_expression
+            (type_descriptor
+              (qualified_identifier
+                (namespace_identifier)
+                (type_identifier))))))))
+  (declaration
+    (type_qualifier)
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (call_expression
+        (splice_type_specifier
+          (splice_specifier
+            (reflect_expression
+              (type_descriptor
+                (primitive_type)))))
+        (argument_list
+          (number_literal)))))
+  (declaration
+    (type_qualifier)
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (compound_literal_expression
+        (splice_type_specifier
+          (splice_specifier
+            (reflect_expression
+              (type_descriptor
+                (primitive_type)))))
+        (initializer_list
+          (number_literal)))))
+  (declaration
+    (type_qualifier)
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (identifier)
+      (template_function
+        (identifier)
+        (template_argument_list
+          (parenthesized_expression
+            (splice_expression
+              (splice_specifier
+                (reflect_expression
+                  (identifier)))))))))
+  (expression_statement
+    (call_expression
+      (splice_expression
+        (splice_specifier
+          (reflect_expression
+            (type_descriptor
+              (qualified_identifier
+                (namespace_identifier)
+                (type_identifier))))))
+      (argument_list
+        (number_literal)
+        (number_literal))))
+  (declaration
+    (type_identifier)
+    (init_declarator
+      (pointer_declarator
+        (identifier))
+      (call_expression
+        (splice_expression
+          (splice_specifier
+            (identifier))
+          (template_argument_list
+            (number_literal)))
+        (argument_list))))
+  (declaration
+    (template_type
+      (type_identifier)
+      (template_argument_list
+        (binary_expression
+          (splice_expression
+            (splice_specifier
+              (identifier)))
+          (number_literal))))
+    (identifier))
+  (template_declaration
+    (template_parameter_list
+      (parameter_declaration
+        (placeholder_type_specifier
+          (auto))
+        (identifier))
+      (parameter_declaration
+        (placeholder_type_specifier
+          (auto))
+        (identifier)))
+    (function_definition
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list))
+      (compound_statement
+        (alias_declaration
+          (type_identifier)
+          (type_descriptor
+            (splice_type_specifier
+              (splice_specifier
+                (identifier))
+              (template_argument_list
+                (number_literal)))))
+        (static_assert_declaration
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (qualified_identifier
+                  (splice_type_specifier
+                    (splice_specifier
+                      (identifier)))
+                  (identifier))
+                (number_literal))
+              (qualified_identifier
+                (identifier)))
+            (qualified_identifier
+              (namespace_identifier)
+              (identifier)))))))
+  (expression_statement
+    (call_expression
+      (template_function
+        (identifier)
+        (template_argument_list
+          (reflect_expression
+            (type_descriptor
+              (qualified_identifier
+                (namespace_identifier)
+                (type_identifier))))
+          (reflect_expression
+            (identifier))))
+      (argument_list)))
+  (declaration
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (field_expression
+        (identifier)
+        (splice_expression
+          (splice_specifier
+            (subscript_expression
+              (identifier)
+              (subscript_argument_list
+                (identifier))))))))
+  (declaration
+    (primitive_type)
+    (init_declarator
+      (identifier)
+      (field_expression
+        (identifier)
+        (splice_expression
+          (splice_specifier
+            (subscript_expression
+              (identifier)
+              (subscript_argument_list
+                (identifier)))))))))
+
+================================================================================
+Consteval blocks
+================================================================================
+class A {
+  struct A;
+  consteval {
+    std::meta::define_aggregate(^^S, {});
+    return;
+  }
+};
+
+template <std::meta::info R> consteval void tfn2() {
+  consteval { std::meta::define_aggregate(R, {}); }
+}
+
+template <typename> struct TCls {
+  static constexpr void sfn() requires ([] {
+    struct S4;
+    consteval { std::meta::define_aggregate(^^S4, {}); }
+    return true;
+  }()) { }
+};
+
+consteval { TCls<void>::sfn(); }
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (class_specifier
+    (type_identifier)
+    (field_declaration_list
+      (field_declaration
+        (struct_specifier
+          (type_identifier)))
+      (consteval_block_declaration
+        (compound_statement
+          (expression_statement
+            (call_expression
+              (qualified_identifier
+                (namespace_identifier)
+                (qualified_identifier
+                  (namespace_identifier)
+                  (identifier)))
+              (argument_list
+                (reflect_expression
+                  (identifier))
+                (initializer_list))))
+          (return_statement)))))
+  (template_declaration
+    (template_parameter_list
+      (parameter_declaration
+        (qualified_identifier
+          (namespace_identifier)
+          (qualified_identifier
+            (namespace_identifier)
+            (type_identifier)))
+        (identifier)))
+    (function_definition
+      (type_qualifier)
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list))
+      (compound_statement
+        (consteval_block_declaration
+          (compound_statement
+            (expression_statement
+              (call_expression
+                (qualified_identifier
+                  (namespace_identifier)
+                  (qualified_identifier
+                    (namespace_identifier)
+                    (identifier)))
+                (argument_list
+                  (identifier)
+                  (initializer_list)))))))))
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration))
+    (struct_specifier
+      (type_identifier)
+      (field_declaration_list
+        (function_definition
+          (storage_class_specifier)
+          (type_qualifier)
+          (primitive_type)
+          (function_declarator
+            (field_identifier)
+            (parameter_list)
+            (requires_clause
+              (call_expression
+                (lambda_expression
+                  (lambda_capture_specifier)
+                  (compound_statement
+                    (struct_specifier
+                      (type_identifier))
+                    (consteval_block_declaration
+                      (compound_statement
+                        (expression_statement
+                          (call_expression
+                            (qualified_identifier
+                              (namespace_identifier)
+                              (qualified_identifier
+                                (namespace_identifier)
+                                (identifier)))
+                            (argument_list
+                              (reflect_expression
+                                (identifier))
+                              (initializer_list))))))
+                    (return_statement
+                      (true))))
+                (argument_list))))
+          (compound_statement)))))
+  (consteval_block_declaration
+    (compound_statement
+      (expression_statement
+        (call_expression
+          (qualified_identifier
+            (template_type
+              (type_identifier)
+              (template_argument_list
+                (type_descriptor
+                  (primitive_type))))
+            (identifier))
+          (argument_list))))))
+
+================================================================================
+Annotations
+================================================================================
+
+[[=1]] void f();
+[[=2, =3]] void g();
+void g [[=4]] [[=2]] ();
+
+template <class T>
+[[=T::type()]] void f(T t);
+
+struct Option { bool value; };
+struct C {
+    [[=Option{true}]] int a;
+    [[=Option{false}]] int b;
+};
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (declaration
+    (attribute_declaration
+      (annotation
+        (number_literal)))
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list)))
+  (declaration
+    (attribute_declaration
+      (annotation
+        (number_literal))
+      (annotation
+        (number_literal)))
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list)))
+  (declaration
+    (primitive_type)
+    (function_declarator
+      (attributed_declarator
+        (identifier)
+        (attribute_declaration
+          (annotation
+            (number_literal)))
+        (attribute_declaration
+          (annotation
+            (number_literal))))
+      (parameter_list)))
+  (template_declaration
+    (template_parameter_list
+      (type_parameter_declaration
+        (type_identifier)))
+    (declaration
+      (attribute_declaration
+        (annotation
+          (call_expression
+            (qualified_identifier
+              (namespace_identifier)
+              (identifier))
+            (argument_list))))
+      (primitive_type)
+      (function_declarator
+        (identifier)
+        (parameter_list
+          (parameter_declaration
+            (type_identifier)
+            (identifier))))))
+  (struct_specifier
+    (type_identifier)
+    (field_declaration_list
+      (field_declaration
+        (primitive_type)
+        (field_identifier))))
+  (struct_specifier
+    (type_identifier)
+    (field_declaration_list
+      (field_declaration
+        (attribute_declaration
+          (annotation
+            (compound_literal_expression
+              (type_identifier)
+              (initializer_list
+                (true)))))
+        (primitive_type)
+        (field_identifier))
+      (field_declaration
+        (attribute_declaration
+          (annotation
+            (compound_literal_expression
+              (type_identifier)
+              (initializer_list
+                (false)))))
+        (primitive_type)
+        (field_identifier)))))
+
+================================================================================
+Expansion statements
+================================================================================
+
+template for (auto const& c : {Containers...}) {}
+template for (constexpr int I : std::views::iota(0zu, sizeof...(Ts))) {}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (expansion_statement
+    (placeholder_type_specifier
+      (auto))
+    (type_qualifier)
+    (reference_declarator
+      (identifier))
+    (initializer_list
+      (parameter_pack_expansion
+        (identifier)))
+    (compound_statement))
+  (expansion_statement
+    (type_qualifier)
+    (primitive_type)
+    (identifier)
+    (call_expression
+      (qualified_identifier
+        (namespace_identifier)
+        (qualified_identifier
+          (namespace_identifier)
+          (identifier)))
+      (argument_list
+        (number_literal)
+        (sizeof_expression
+          (identifier))))
+    (compound_statement)))
