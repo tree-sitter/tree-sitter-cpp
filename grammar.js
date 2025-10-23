@@ -227,7 +227,7 @@ module.exports = grammar(C, {
         field('name', $._class_name),
         seq(
           optional(field('name', $._class_name)),
-          optional($.virtual_specifier),
+          optional(repeat($.class_property_specifier)),
           optional($.base_class_clause),
           field('body', $.field_declaration_list),
         ),
@@ -235,6 +235,12 @@ module.exports = grammar(C, {
       optional($.attribute_specifier),
     )),
 
+    class_property_specifier: $ => choice(
+      'final',
+      'trivially_relocatable_if_eligible',
+      'replaceable_if_eligible',
+    ),
+ 
     class_specifier: $ => seq(
       'class',
       $._class_declaration,

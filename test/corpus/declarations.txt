@@ -651,14 +651,14 @@ struct D final {};
 (translation_unit
   (class_specifier
     (type_identifier)
-    (virtual_specifier)
+    (class_property_specifier)
     (base_class_clause
       (access_specifier)
       (type_identifier))
     (field_declaration_list))
   (class_specifier
     (type_identifier)
-    (virtual_specifier)
+    (class_property_specifier)
     (field_declaration_list))
   (struct_specifier
     (type_identifier)
@@ -937,7 +937,7 @@ class A final : [[deprecated]] public B {};
     (field_declaration_list))
   (class_specifier
     (type_identifier)
-    (virtual_specifier)
+    (class_property_specifier)
     (base_class_clause
       (attribute_declaration
         (attribute
