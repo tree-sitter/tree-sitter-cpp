@@ -31,9 +31,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-15]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Checkout tree-sitter-c
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: tree-sitter/tree-sitter-c
           path: node_modules/tree-sitter-c
