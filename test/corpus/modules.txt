@@ -73,9 +73,10 @@ export import mod;
 --------------------------------------------------------------------------------
 
 (translation_unit
-  (import_declaration
-    name: (module_name
-      (identifier))))
+  (export_declaration
+    (import_declaration
+      name: (module_name
+        (identifier)))))
 
 ================================================================================
 import Declaration partition with export
@@ -85,10 +86,11 @@ export import :mod;
 --------------------------------------------------------------------------------
 
 (translation_unit
-  (import_declaration
-    partition: (module_partition
-      (module_name
-        (identifier)))))
+  (export_declaration
+    (import_declaration
+      partition: (module_partition
+        (module_name
+          (identifier))))))
 
 ================================================================================
 import Declaration headerunit with export
@@ -98,8 +100,9 @@ export import <iostream>;
 --------------------------------------------------------------------------------
 
 (translation_unit
-  (import_declaration
-    header: (system_lib_string)))
+  (export_declaration
+    (import_declaration
+      header: (system_lib_string))))
 
 ================================================================================
 global module fragment
@@ -171,22 +174,23 @@ char const* french() { return "Salut!"; }
         (string_literal
           (string_content)))))
   (export_declaration
-    (function_definition
-      type: (primitive_type)
-      declarator: (function_declarator
-        declarator: (identifier)
-        parameters: (parameter_list))
-      body: (compound_statement
-        (return_statement
-          (number_literal))))
-    (function_definition
-      type: (primitive_type)
-      declarator: (function_declarator
-        declarator: (identifier)
-        parameters: (parameter_list))
-      body: (compound_statement
-        (return_statement
-          (number_literal)))))
+    (declaration_list
+      (function_definition
+        type: (primitive_type)
+        declarator: (function_declarator
+          declarator: (identifier)
+          parameters: (parameter_list))
+        body: (compound_statement
+          (return_statement
+            (number_literal))))
+      (function_definition
+        type: (primitive_type)
+        declarator: (function_declarator
+          declarator: (identifier)
+          parameters: (parameter_list))
+        body: (compound_statement
+          (return_statement
+            (number_literal))))))
   (export_declaration
     (namespace_definition
       name: (namespace_identifier)
@@ -213,3 +217,51 @@ char const* french() { return "Salut!"; }
             (return_statement
               (string_literal
                 (string_content)))))))))
+
+================================================================================
+Modules in preprocessor sections
+================================================================================
+
+#ifdef USE_MODULES
+module;
+#include <vector>
+export module foo;
+#endif
+
+#if USE_MODULES
+import std;
+#else
+import <vector>;
+#endif
+
+export {
+#ifdef USE_MODULE
+class Foo;
+#endif
+}
+
+--------
+
+(translation_unit
+  (preproc_ifdef
+    (identifier)
+    (global_module_fragment_declaration)
+      (preproc_include
+        (system_lib_string))
+    (module_declaration
+      (module_name
+        (identifier))))
+  (preproc_if
+    (identifier)
+    (import_declaration
+      (module_name
+        (identifier)))
+    (preproc_else
+      (import_declaration
+        (system_lib_string))))
+  (export_declaration
+    (declaration_list
+      (preproc_ifdef
+        (identifier)
+        (class_specifier
+          (type_identifier))))))
