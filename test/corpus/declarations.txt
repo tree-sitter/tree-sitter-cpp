@@ -95,6 +95,7 @@ using a;
 using ::b;
 using c::d;
 using ::e::f::g;
+using std::unique_ptr, std::make_unique;
 using h = i::j;
 using namespace std;
 using enum Foo;
@@ -125,6 +126,13 @@ using foobar [[deprecated]] [[maybe_unused]] = int;
         (qualified_identifier
           (namespace_identifier)
           (identifier)))))
+  (using_declaration
+    (qualified_identifier
+      (namespace_identifier)
+      (identifier))
+    (qualified_identifier
+      (namespace_identifier)
+      (identifier)))
   (alias_declaration
     (type_identifier)
     (type_descriptor

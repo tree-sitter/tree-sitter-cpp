@@ -851,11 +851,21 @@ module.exports = grammar(C, {
     using_declaration: $ => seq(
       repeat($.attribute_declaration),
       'using',
-      optional(choice('namespace', 'enum')),
       choice(
-        $.identifier,
-        $.qualified_identifier,
-        $.splice_type_specifier,
+        seq(
+          choice('namespace', 'enum'),
+          choice(
+            $.identifier,
+            $.qualified_identifier,
+            $.splice_type_specifier,
+          ),
+        ),
+        commaSep1(
+          choice(
+            $.identifier,
+            $.qualified_identifier,
+          ),
+        ),
       ),
       ';',
     ),
