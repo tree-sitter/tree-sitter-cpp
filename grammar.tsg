@@ -113,21 +113,68 @@ override rule _top_level_item {
     )
 }
 
-// _block_item: same as _top_level_item minus top-level-only items
+// _block_item: same as _top_level_item minus top-level-only items.
+// preproc_if/ifdef use _top_level_item content; the _in_block aliases use
+// _block_item content so block-scoped preprocessor branches stay block-typed.
 override rule _block_item {
     choice(
         function_definition,
         linkage_specification, declaration, statement,
         attributed_statement, type_definition, _empty_declaration,
-        preproc_if, preproc_ifdef, preproc_include,
-        preproc_def, preproc_function_def, preproc_call,
+        preproc_include, preproc_def, preproc_function_def, preproc_call,
         namespace_definition, concept_definition, namespace_alias_definition,
         using_declaration, alias_declaration, static_assert_declaration,
         consteval_block_declaration, template_declaration, template_instantiation,
+        export_declaration, import_declaration,
+        alias(preproc_if_in_block, preproc_if),
+        alias(preproc_ifdef_in_block, preproc_ifdef),
         alias(constructor_or_destructor_definition, function_definition),
         alias(operator_cast_definition, function_definition),
         alias(operator_cast_declaration, declaration),
     )
+}
+
+// preproc_if/ifdef and their alternatives use _top_level_item content
+// at the C++ top level (C uses _block_item).
+override rule preproc_if {
+    c::preproc_if_body(_top_level_item, 0, preproc_else, preproc_elif, preproc_elifdef)
+}
+override rule preproc_ifdef {
+    c::preproc_ifdef_body(_top_level_item, 0, preproc_else, preproc_elif, preproc_elifdef)
+}
+override rule preproc_else { c::preproc_else_body(_top_level_item, 0) }
+override rule preproc_elif {
+    c::preproc_elif_body(_top_level_item, 0, preproc_else, preproc_elif, preproc_elifdef)
+}
+override rule preproc_elifdef {
+    c::preproc_elifdef_body(_top_level_item, 0, preproc_else, preproc_elif, preproc_elifdef)
+}
+
+// Block-scoped preprocessor branches: same shape but with _block_item content.
+rule preproc_if_in_block {
+    c::preproc_if_body(_block_item, 0,
+        alias(preproc_else_in_block, preproc_else),
+        alias(preproc_elif_in_block, preproc_elif),
+        alias(preproc_elifdef_in_block, preproc_elifdef))
+}
+rule preproc_ifdef_in_block {
+    c::preproc_ifdef_body(_block_item, 0,
+        alias(preproc_else_in_block, preproc_else),
+        alias(preproc_elif_in_block, preproc_elif),
+        alias(preproc_elifdef_in_block, preproc_elifdef))
+}
+rule preproc_else_in_block { c::preproc_else_body(_block_item, 0) }
+rule preproc_elif_in_block {
+    c::preproc_elif_body(_block_item, 0,
+        alias(preproc_else_in_block, preproc_else),
+        alias(preproc_elif_in_block, preproc_elif),
+        alias(preproc_elifdef_in_block, preproc_elifdef))
+}
+rule preproc_elifdef_in_block {
+    c::preproc_elifdef_body(_block_item, 0,
+        alias(preproc_else_in_block, preproc_else),
+        alias(preproc_elif_in_block, preproc_elif),
+        alias(preproc_elifdef_in_block, preproc_elifdef))
 }
 
 override rule type_qualifier {
@@ -516,11 +563,11 @@ rule module_declaration {
 }
 
 rule export_declaration {
-    seq("export", choice(_block_item, seq("{", repeat(_block_item), "}")))
+    prec(1, seq("export", choice(_block_item, declaration_list)))
 }
 
 rule import_declaration {
-    seq(optional("export"), "import",
+    seq("import",
         choice(
             field(name, module_name),
             field(partition, module_partition),
