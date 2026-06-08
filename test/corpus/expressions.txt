@@ -1723,3 +1723,59 @@ template <typename... Args> void negateValues(Args... args) {
                     (identifier)))
                 (string_literal
                   (string_content))))))))))
+
+================================================================================
+Explicit destructor calls with template arguments
+================================================================================
+
+int main() {
+  a->~Baz<int>();
+  b.~Qux<int, float>();
+  c->~Box<vector<int>>();
+}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list))
+    (compound_statement
+      (expression_statement
+        (call_expression
+          (field_expression
+            (identifier)
+            (destructor_name
+              (identifier)
+              (template_argument_list
+                (type_descriptor
+                  (primitive_type)))))
+          (argument_list)))
+      (expression_statement
+        (call_expression
+          (field_expression
+            (identifier)
+            (destructor_name
+              (identifier)
+              (template_argument_list
+                (type_descriptor
+                  (primitive_type))
+                (type_descriptor
+                  (primitive_type)))))
+          (argument_list)))
+      (expression_statement
+        (call_expression
+          (field_expression
+            (identifier)
+            (destructor_name
+              (identifier)
+              (template_argument_list
+                (type_descriptor
+                  (template_type
+                    (type_identifier)
+                    (template_argument_list
+                      (type_descriptor
+                        (primitive_type))))))))
+          (argument_list))))))
