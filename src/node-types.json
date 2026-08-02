@@ -4119,10 +4119,6 @@
             "named": true
           },
           {
-            "type": "field_identifier",
-            "named": true
-          },
-          {
             "type": "subscript_designator",
             "named": true
           },

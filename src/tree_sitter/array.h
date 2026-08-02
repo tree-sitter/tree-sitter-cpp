@@ -50,25 +50,37 @@ extern "C" {
 /// memory allocated for the array's contents.
 #define array_clear(self) ((self)->size = 0)
 
+#ifdef __cplusplus
+#define _array__cast(self, expr) (decltype((self)->contents))(expr)
+#else
+#define _array__cast(self, expr) (expr)
+#endif
+
 /// Reserve `new_capacity` elements of space in the array. If `new_capacity` is
 /// less than the array's current capacity, this function has no effect.
-#define array_reserve(self, new_capacity)        \
-  ((self)->contents = _array__reserve(           \
-    (void *)(self)->contents, &(self)->capacity, \
-    array_elem_size(self), new_capacity)         \
+#define array_reserve(self, new_capacity)                 \
+  ((self)->contents = _array__cast(self, _array__reserve( \
+    (void *)(self)->contents, &(self)->capacity,          \
+    array_elem_size(self), new_capacity))                 \
   )
 
 /// Free any memory allocated for this array. Note that this does not free any
 /// memory allocated for the array's contents.
-#define array_delete(self) _array__delete((self), (void *)(self)->contents, sizeof(*self))
+#define array_delete(self)                           \
+  do {                                               \
+    if ((self)->contents) ts_free((self)->contents); \
+    (self)->contents = NULL;                         \
+    (self)->size = 0;                                \
+    (self)->capacity = 0;                            \
+  } while (0)
 
 /// Push a new `element` onto the end of the array.
 #define array_push(self, element)                                 \
   do {                                                            \
-    (self)->contents = _array__grow(                              \
+    (self)->contents = _array__cast(self, _array__grow(           \
       (void *)(self)->contents, (self)->size, &(self)->capacity,  \
       1, array_elem_size(self)                                    \
-    );                                                            \
+    ));                                                           \
    (self)->contents[(self)->size++] = (element);                  \
   } while(0)
 
@@ -77,10 +89,10 @@ extern "C" {
 #define array_grow_by(self, count)                                               \
   do {                                                                           \
     if ((count) == 0) break;                                                     \
-    (self)->contents = _array__grow(                                             \
+    (self)->contents = _array__cast(self, _array__grow(                          \
       (self)->contents, (self)->size, &(self)->capacity,                         \
       count, array_elem_size(self)                                               \
-    );                                                                           \
+    ));                                                                          \
     memset((self)->contents + (self)->size, 0, (count) * array_elem_size(self)); \
     (self)->size += (count);                                                     \
   } while (0)
@@ -92,26 +104,26 @@ extern "C" {
 /// Append `count` elements to the end of the array, reading their values from the
 /// `contents` pointer.
 #define array_extend(self, count, other_contents)                 \
-  (self)->contents = _array__splice(                              \
+  ((self)->contents = _array__cast(self, _array__splice(          \
     (void*)(self)->contents, &(self)->size, &(self)->capacity,    \
     array_elem_size(self), (self)->size, 0, count, other_contents \
-  )
+  )))
 
 /// Remove `old_count` elements from the array starting at the given `index`. At
 /// the same index, insert `new_count` new elements, reading their values from the
 /// `new_contents` pointer.
 #define array_splice(self, _index, old_count, new_count, new_contents) \
-  (self)->contents = _array__splice(                                   \
+  ((self)->contents = _array__cast(self, _array__splice(              \
     (void *)(self)->contents, &(self)->size, &(self)->capacity,        \
     array_elem_size(self), _index, old_count, new_count, new_contents  \
-  )
+  )))
 
 /// Insert one `element` into the array at the given `index`.
 #define array_insert(self, _index, element)                     \
-  (self)->contents = _array__splice(                            \
+  ((self)->contents = _array__cast(self, _array__splice(        \
     (void *)(self)->contents, &(self)->size, &(self)->capacity, \
     array_elem_size(self), _index, 0, 1, &(element)             \
-  )
+  )))
 
 /// Remove one element from the array at the given `index`.
 #define array_erase(self, _index) \
@@ -122,20 +134,19 @@ extern "C" {
 
 /// Assign the contents of one array to another, reallocating if necessary.
 #define array_assign(self, other)                                   \
-  (self)->contents = _array__assign(                                \
+  ((self)->contents = _array__cast(self, _array__assign(            \
     (void *)(self)->contents, &(self)->size, &(self)->capacity,     \
     (const void *)(other)->contents, (other)->size, array_elem_size(self) \
-  )
+  )))
 
 /// Swap one array with another
 #define array_swap(self, other)                                     \
   do {                                                              \
-    struct Swap swapped_contents = _array__swap(                    \
-      (void *)(self)->contents, &(self)->size, &(self)->capacity,   \
-      (void *)(other)->contents, &(other)->size, &(other)->capacity \
-    );                                                              \
-    (self)->contents = swapped_contents.self_contents;              \
-    (other)->contents = swapped_contents.other_contents;            \
+    void *_array_swap_tmp = (void *)(self)->contents;               \
+    (self)->contents = (other)->contents;                           \
+    (other)->contents = _array__cast(other, _array_swap_tmp);       \
+    _array__swap(&(self)->size, &(self)->capacity,                  \
+                 &(other)->size, &(other)->capacity);               \
   } while (0)
 
 /// Get the size of the array contents
@@ -188,12 +199,6 @@ extern "C" {
 // The `Array` type itself was not altered as a solution in order to avoid breakage
 // with existing consumers (in particular, parsers with external scanners).
 
-/// This is not what you're looking for, see `array_delete`.
-static inline void _array__delete(void *self, void *contents, size_t self_size) {
-  if (contents) ts_free(contents);
-  if (self) memset(self, 0, self_size);
-}
-
 /// This is not what you're looking for, see `array_erase`.
 static inline void _array__erase(void* self_contents, uint32_t *size,
                                 size_t element_size, uint32_t index) {
@@ -228,31 +233,15 @@ static inline void *_array__assign(void* self_contents, uint32_t *self_size, uin
   return new_contents;
 }
 
-struct Swap {
-  void *self_contents;
-  void *other_contents;
-};
-
 /// This is not what you're looking for, see `array_swap`.
-// static inline void _array__swap(Array *self, Array *other) {
-static inline struct Swap _array__swap(void *self_contents, uint32_t *self_size, uint32_t *self_capacity,
-                               void *other_contents, uint32_t *other_size, uint32_t *other_capacity) {
-  void *new_self_contents = other_contents;
-  uint32_t new_self_size = *other_size;
-  uint32_t new_self_capacity = *other_capacity;
-
-  void *new_other_contents = self_contents;
-  *other_size = *self_size;
-  *other_capacity = *self_capacity;
-
-  *self_size = new_self_size;
-  *self_capacity = new_self_capacity;
-
-  struct Swap out = {
-    .self_contents = new_self_contents,
-    .other_contents = new_other_contents,
-  };
-  return out;
+static inline void _array__swap(uint32_t *self_size, uint32_t *self_capacity,
+                               uint32_t *other_size, uint32_t *other_capacity) {
+  uint32_t tmp_size = *self_size;
+  uint32_t tmp_capacity = *self_capacity;
+  *self_size = *other_size;
+  *self_capacity = *other_capacity;
+  *other_size = tmp_size;
+  *other_capacity = tmp_capacity;
 }
 
 /// This is not what you're looking for, see `array_push` or `array_grow_by`.

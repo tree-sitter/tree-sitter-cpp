@@ -97,7 +97,6 @@ module.exports = grammar(C, {
     [$._binary_fold_operator, $._fold_operator],
     [$._function_declarator_seq],
     [$.type_specifier, $.sized_type_specifier],
-    [$.initializer_pair, $.comma_expression],
     [$.expression_statement, $._for_statement_body],
     [$.init_statement, $._for_statement_body],
     [$.field_expression, $.template_method, $.template_type],
@@ -539,6 +538,26 @@ module.exports = grammar(C, {
     // Avoid ambiguity between compound statement and initializer list in a construct like:
     //   A b {};
     compound_statement: (_, original) => prec(-1, original),
+
+    initializer_pair: $ => choice(
+      seq(
+        field('designator', repeat1(choice(
+          $.subscript_designator,
+          $.field_designator,
+          $.subscript_range_designator,
+        ))),
+        choice(
+          seq(
+            '=',
+            field('value', $.expression)
+          ),
+          seq(
+            optional('='),
+            field('value', $.initializer_list)
+          )
+        )
+      ),
+    ),
 
     field_initializer_list: $ => seq(
       ':',

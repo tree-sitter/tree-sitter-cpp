@@ -32,6 +32,12 @@ Compound literals without parentheses
 
 T x = T{0};
 U<V> y = U<V>{0};
+W z = W {
+  .a = {0},
+  .b = {},
+  .c {1},
+  .d {}
+};
 int x = int{1};
 
 --------------------------------------------------------------------------------
@@ -61,6 +67,31 @@ int x = int{1};
               (type_identifier))))
         (initializer_list
           (number_literal)))))
+  (declaration
+    (type_identifier)
+    (init_declarator
+      (identifier)
+      (compound_literal_expression
+        (type_identifier)
+        (initializer_list
+          (initializer_pair
+            (field_designator
+              (field_identifier))
+            (initializer_list
+              (number_literal)))
+          (initializer_pair
+            (field_designator
+              (field_identifier))
+            (initializer_list))
+          (initializer_pair
+            (field_designator
+              (field_identifier))
+            (initializer_list
+              (number_literal)))
+          (initializer_pair
+            (field_designator
+              (field_identifier))
+            (initializer_list))))))
   (declaration
     (primitive_type)
     (init_declarator
