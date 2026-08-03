@@ -133,13 +133,29 @@ unsigned tree_sitter_cpp_external_scanner_serialize(void *payload, char *buffer)
 }
 
 void tree_sitter_cpp_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
-    assert(length % sizeof(wchar_t) == 0 && "Can't decode serialized delimiter!");
-
     Scanner *scanner = (Scanner *)payload;
-    scanner->delimiter_length = length / sizeof(wchar_t);
-    if (length > 0) {
-        memcpy(&scanner->delimiter[0], buffer, length);
+    reset(scanner);
+
+    // We can't assume this buffer is one we wrote, as we are handed whatever 
+    // scanner state that was stored on the tree it's reusing. Also, there is
+    // no check to ensure that the tree came from this language, so the bytes
+    // we are dealing with might from another grammar entirely.
+    //
+    // So we take only what `tree_sitter_cpp_external_scanner_serialize` could have
+    // possibly produced: a whole number of delimiter characters, and no more of them
+    // than what `delimiter` holds. As such, everything that reads `delimiter` trusts the
+    // limit, so if we restore more characters than fit in it, it would send those reads
+    // off the end of the array. Additionally, no other function can leave
+    // `delimiter_length` that large, which makes this the place to check. Anything
+    // else we encounter, we drop rather than trim because if we are getting part of
+    // another grammar's delimiter it isn't a delimiter to us, and starting empty is
+    // always safe.
+    if (length == 0 || length > sizeof scanner->delimiter || length % sizeof(wchar_t) != 0) {
+        return;
     }
+
+    scanner->delimiter_length = (uint8_t)(length / sizeof(wchar_t));
+    memcpy(&scanner->delimiter[0], buffer, length);
 }
 
 void tree_sitter_cpp_external_scanner_destroy(void *payload) {
