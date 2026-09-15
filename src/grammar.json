@@ -11081,51 +11081,6 @@
         ]
       }
     },
-    "true": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "TRUE"
-          },
-          {
-            "type": "STRING",
-            "value": "true"
-          }
-        ]
-      }
-    },
-    "false": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "FALSE"
-          },
-          {
-            "type": "STRING",
-            "value": "false"
-          }
-        ]
-      }
-    },
-    "null": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "NULL"
-        },
-        {
-          "type": "STRING",
-          "value": "nullptr"
-        }
-      ]
-    },
     "identifier": {
       "type": "PATTERN",
       "value": "(\\p{XID_Start}|\\$|_|\\\\u[0-9A-Fa-f]{4}|\\\\U[0-9A-Fa-f]{8})(\\p{XID_Continue}|\\$|\\\\u[0-9A-Fa-f]{4}|\\\\U[0-9A-Fa-f]{8})*"
@@ -11240,6 +11195,51 @@
           }
         ]
       }
+    },
+    "true": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "TRUE"
+          },
+          {
+            "type": "STRING",
+            "value": "true"
+          }
+        ]
+      }
+    },
+    "false": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "FALSE"
+          },
+          {
+            "type": "STRING",
+            "value": "false"
+          }
+        ]
+      }
+    },
+    "null": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "NULL"
+        },
+        {
+          "type": "STRING",
+          "value": "nullptr"
+        }
+      ]
     },
     "preproc_if_in_block": {
       "type": "PREC",
@@ -18130,10 +18130,6 @@
         ]
       }
     },
-    "this": {
-      "type": "STRING",
-      "value": "this"
-    },
     "literal_suffix": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
@@ -18175,6 +18171,10 @@
       },
       "named": true,
       "value": "namespace_identifier"
+    },
+    "this": {
+      "type": "STRING",
+      "value": "this"
     }
   },
   "extras": [

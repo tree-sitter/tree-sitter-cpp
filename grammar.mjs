@@ -1499,9 +1499,8 @@ export const
       seq(choice('new', 'delete'), optional('[]')),
       seq('""', C.identifier),
     ),
-  )));
-const this_ = rule(() => 'this');
-export const
+  ))),
+
   concatenated_string = rule(() => prec.right(seq(
     choice(C.identifier, C.string_literal, raw_string_literal),
     choice(C.string_literal, raw_string_literal),
@@ -1571,6 +1570,8 @@ export const
 
   _namespace_identifier = rule(() => alias(C.identifier, namespace_identifier));
 
+// The public name cannot be used as a local binding in an ES module.
+const this_ = rule(() => 'this');
 export {this_ as this};
 
 /**
