@@ -4,14 +4,20 @@ on:
   push:
     branches: [master]
     paths:
-      - grammar.js
+      - grammar.mjs
+      - scripts/tree-sitter.mjs
+      - package.json
+      - package-lock.json
       - src/**
       - test/**
       - bindings/**
       - binding.gyp
   pull_request:
     paths:
-      - grammar.js
+      - grammar.mjs
+      - scripts/tree-sitter.mjs
+      - package.json
+      - package-lock.json
       - src/**
       - test/**
       - bindings/**

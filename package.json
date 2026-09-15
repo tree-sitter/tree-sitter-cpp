@@ -23,11 +23,12 @@
     "c++"
   ],
   "files": [
-    "grammar.js",
+    "grammar.mjs",
     "tree-sitter.json",
     "binding.gyp",
     "prebuilds/**",
     "bindings/node/*",
+    "scripts/tree-sitter.mjs",
     "queries/*",
     "src/**",
     "*.wasm"
@@ -35,16 +36,17 @@
   "dependencies": {
     "node-addon-api": "^8.2.1",
     "node-gyp-build": "^4.8.2",
-    "tree-sitter-c": "^0.24.0"
+    "tree-sitter-c": "file:../tree-sitter-c"
   },
   "devDependencies": {
     "eslint": "^9.12.0",
     "eslint-config-treesitter": "^1.0.2",
     "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "^0.26.0"
+    "tree-sitter": "^0.25.0",
+    "tree-sitter-cli": "file:../tree-sitter/crates/cli/npm"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.22.4"
+    "tree-sitter": "^0.25.0"
   },
   "peerDependenciesMeta": {
     "tree-sitter": {
@@ -53,9 +55,12 @@
   },
   "scripts": {
     "install": "node-gyp-build",
-    "lint": "eslint grammar.js",
-    "prestart": "tree-sitter build --wasm",
-    "start": "tree-sitter playground",
+    "lint": "eslint grammar.mjs",
+    "tree-sitter": "node scripts/tree-sitter.mjs",
+    "generate": "node scripts/tree-sitter.mjs generate grammar.mjs",
+    "test:corpus": "node scripts/tree-sitter.mjs test",
+    "prestart": "node scripts/tree-sitter.mjs build --wasm",
+    "start": "node scripts/tree-sitter.mjs playground",
     "test": "node --test bindings/node/*_test.js"
   }
 }
