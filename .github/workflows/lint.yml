@@ -4,10 +4,16 @@ on:
   push:
     branches: [master]
     paths:
-      - grammar.js
+      - grammar.mjs
+      - eslint.config.mjs
+      - package.json
+      - package-lock.json
   pull_request:
     paths:
-      - grammar.js
+      - grammar.mjs
+      - eslint.config.mjs
+      - package.json
+      - package-lock.json
 
 jobs:
   lint:

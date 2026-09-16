@@ -2,7 +2,6 @@
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "cpp",
   "inherits": "c",
-  "word": "identifier",
   "rules": {
     "translation_unit": {
       "type": "REPEAT",
@@ -18188,6 +18187,17 @@
       "name": "comment"
     }
   ],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "raw_string_delimiter"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "raw_string_content"
+    }
+  ],
+  "word": "identifier",
   "conflicts": [
     [
       "type_specifier",
@@ -18354,6 +18364,24 @@
       "splice_expression"
     ]
   ],
+  "inline": [
+    "_type_identifier",
+    "_field_identifier",
+    "_statement_identifier",
+    "_non_case_statement",
+    "_assignment_left_expression",
+    "_expression_not_binary",
+    "_namespace_identifier"
+  ],
+  "supertypes": [
+    "expression",
+    "statement",
+    "type_specifier",
+    "_declarator",
+    "_field_declarator",
+    "_type_declarator",
+    "_abstract_declarator"
+  ],
   "precedences": [
     [
       {
@@ -18375,34 +18403,6 @@
         "name": "_class_name"
       }
     ]
-  ],
-  "externals": [
-    {
-      "type": "SYMBOL",
-      "name": "raw_string_delimiter"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "raw_string_content"
-    }
-  ],
-  "inline": [
-    "_type_identifier",
-    "_field_identifier",
-    "_statement_identifier",
-    "_non_case_statement",
-    "_assignment_left_expression",
-    "_expression_not_binary",
-    "_namespace_identifier"
-  ],
-  "supertypes": [
-    "expression",
-    "statement",
-    "type_specifier",
-    "_declarator",
-    "_field_declarator",
-    "_type_declarator",
-    "_abstract_declarator"
   ],
   "reserved": {}
 }
