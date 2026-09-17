@@ -816,6 +816,9 @@ int f() { }
 class [[gnu::visibility("default")]] A {};
 struct [[gnu::visibility("default")]] A {};
 union [[gnu::visibility("default")]] A {};
+enum [[gnu::visibility("default")]] A;
+enum class [[gnu::visibility("default")]] A;
+enum struct [[gnu::visibility("default")]] A;
 
 class [[gnu::visibility("default")]] [[deprecated]] A {};
 class A final : [[deprecated]] public B {};
@@ -922,6 +925,33 @@ class A final : [[deprecated]] public B {};
             (string_content)))))
     (type_identifier)
     (field_declaration_list))
+  (enum_specifier
+    (attribute_declaration
+      (attribute
+        (identifier)
+        (identifier)
+        (argument_list
+          (string_literal
+            (string_content)))))
+    (type_identifier))
+  (enum_specifier
+    (attribute_declaration
+      (attribute
+        (identifier)
+        (identifier)
+        (argument_list
+          (string_literal
+            (string_content)))))
+    (type_identifier))
+  (enum_specifier
+    (attribute_declaration
+      (attribute
+        (identifier)
+        (identifier)
+        (argument_list
+          (string_literal
+            (string_content)))))
+    (type_identifier))
   (class_specifier
     (attribute_declaration
       (attribute
@@ -1683,6 +1713,12 @@ class Foo {
   };
 };
 
+enum class Color {
+  RED [[attribute]] = 0,
+  GREEN [[deprecated]],
+  BLUE
+};
+
 --------------------------------------------------------------------------------
 
 (translation_unit
@@ -1735,7 +1771,23 @@ class Foo {
             (enumerator
               (identifier))
             (enumerator
-              (identifier))))))))
+              (identifier)))))))
+  (enum_specifier
+    (type_identifier)
+    (enumerator_list
+      (enumerator
+        (identifier)
+        (attribute_declaration
+          (attribute
+            (identifier)))
+        (number_literal))
+      (enumerator
+        (identifier)
+        (attribute_declaration
+          (attribute
+            (identifier))))
+      (enumerator
+        (identifier)))))
 
 ================================================================================
 static_assert declarations
