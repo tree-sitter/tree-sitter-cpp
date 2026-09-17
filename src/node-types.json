@@ -22,6 +22,10 @@
       {
         "type": "abstract_reference_declarator",
         "named": true
+      },
+      {
+        "type": "qualified_identifier",
+        "named": true
       }
     ]
   },
@@ -6184,6 +6188,10 @@
         "multiple": true,
         "required": true,
         "types": [
+          {
+            "type": "abstract_pointer_declarator",
+            "named": true
+          },
           {
             "type": "dependent_name",
             "named": true
