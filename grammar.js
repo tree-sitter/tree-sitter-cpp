@@ -930,12 +930,20 @@ module.exports = grammar(C, {
 
     if_statement: $ => prec.right(seq(
       'if',
-      optional('constexpr'),
-      field('condition', $.condition_clause),
-      field('consequence', $.statement),
-      optional(field('alternative', $.else_clause)),
-    )),
-
+      choice(
+        seq(
+          optional('constexpr'),
+          field('condition', $.condition_clause),
+          field('consequence', $.statement),
+        ),
+      seq(
+        optional('!'),
+        'consteval',
+        field('consequence', $.compound_statement),
+      ),
+    ),
+  optional(field('alternative', $.else_clause)),
+)),
     // Using prec(1) instead of prec.dynamic(1) causes issues with the
     // range loop's declaration specifiers if `int` is passed in, it'll
     // always prefer the standard for loop and give us a parse error.
