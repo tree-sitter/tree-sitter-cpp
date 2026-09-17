@@ -105,6 +105,7 @@ module.exports = grammar(C, {
     [$.qualified_field_identifier, $.template_method, $.template_type],
     [$.type_specifier, $.template_type, $.template_function, $.expression],
     [$.splice_type_specifier, $.splice_expression],
+    [$.destructor_name],
   ],
 
   inline: ($, original) => original.concat([
@@ -1379,7 +1380,7 @@ module.exports = grammar(C, {
       ')',
     ),
 
-    destructor_name: $ => prec(1, seq('~', $.identifier)),
+    destructor_name: $ => prec(1, seq('~', $.identifier, optional($.template_argument_list))),
 
     compound_literal_expression: ($, original) => choice(
       original,
@@ -1414,6 +1415,7 @@ module.exports = grammar(C, {
         alias($.dependent_field_identifier, $.dependent_name),
         alias($.qualified_field_identifier, $.qualified_identifier),
         $.template_method,
+        $.destructor_name,
         prec.dynamic(2, $._field_identifier),
       )),
     ),
