@@ -103,6 +103,7 @@ module.exports = grammar(C, {
     [$.field_expression, $.template_method, $.template_type],
     [$.field_expression, $.template_method],
     [$.qualified_field_identifier, $.template_method, $.template_type],
+    [$._declaration_modifiers, $.friend_declaration],
     [$.type_specifier, $.template_type, $.template_function, $.expression],
     [$.splice_type_specifier, $.splice_expression],
   ],
@@ -655,6 +656,7 @@ module.exports = grammar(C, {
     pure_virtual_clause: _ => seq('=', /0/, ';'),
 
     friend_declaration: $ => seq(
+      optional($.attribute_declaration),
       optional('constexpr'),
       'friend',
       choice(
@@ -930,12 +932,20 @@ module.exports = grammar(C, {
 
     if_statement: $ => prec.right(seq(
       'if',
-      optional('constexpr'),
-      field('condition', $.condition_clause),
-      field('consequence', $.statement),
-      optional(field('alternative', $.else_clause)),
-    )),
-
+      choice(
+        seq(
+          optional('constexpr'),
+          field('condition', $.condition_clause),
+          field('consequence', $.statement),
+        ),
+      seq(
+        optional('!'),
+        'consteval',
+        field('consequence', $.compound_statement),
+      ),
+    ),
+  optional(field('alternative', $.else_clause)),
+)),
     // Using prec(1) instead of prec.dynamic(1) causes issues with the
     // range loop's declaration specifiers if `int` is passed in, it'll
     // always prefer the standard for loop and give us a parse error.
