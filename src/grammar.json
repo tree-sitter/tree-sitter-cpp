@@ -14469,37 +14469,82 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "CHOICE",
+              "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "namespace"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "namespace"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "enum"
+                    }
+                  ]
                 },
                 {
-                  "type": "STRING",
-                  "value": "enum"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "qualified_identifier"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "splice_type_specifier"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "qualified_identifier"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "splice_type_specifier"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "qualified_identifier"
+                    }
+                  ]
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      },
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "identifier"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "qualified_identifier"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           ]
         },
