@@ -3112,6 +3112,14 @@
         {
           "type": "field_initializer",
           "named": true
+        },
+        {
+          "type": "preproc_if",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef",
+          "named": true
         }
       ]
     }
@@ -5358,6 +5366,10 @@
           "named": true
         },
         {
+          "type": "field_initializer",
+          "named": true
+        },
+        {
           "type": "friend_declaration",
           "named": true
         },
@@ -5518,6 +5530,10 @@
           "named": true
         },
         {
+          "type": "field_initializer",
+          "named": true
+        },
+        {
           "type": "friend_declaration",
           "named": true
         },
@@ -5646,6 +5662,10 @@
         },
         {
           "type": "field_declaration",
+          "named": true
+        },
+        {
+          "type": "field_initializer",
           "named": true
         },
         {
@@ -5873,6 +5893,10 @@
           "named": true
         },
         {
+          "type": "field_initializer",
+          "named": true
+        },
+        {
           "type": "friend_declaration",
           "named": true
         },
@@ -6030,6 +6054,10 @@
         },
         {
           "type": "field_declaration",
+          "named": true
+        },
+        {
+          "type": "field_initializer",
           "named": true
         },
         {
