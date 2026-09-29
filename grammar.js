@@ -63,6 +63,7 @@ module.exports = grammar(C, {
   ],
 
   conflicts: $ => [
+    [$.field_initializer_list],
     // C
     [$.type_specifier, $._declarator],
     [$.type_specifier, $.expression],
@@ -540,10 +541,26 @@ module.exports = grammar(C, {
     //   A b {};
     compound_statement: (_, original) => prec(-1, original),
 
+    // An initializer under `#if` carries its own comma: after it when it
+    // comes before the last unconditional initializer, before it when it
+    // comes after the first one.
     field_initializer_list: $ => seq(
       ':',
-      commaSep1($.field_initializer),
+      repeat(choice(
+        seq($.field_initializer, ','),
+        alias($.preproc_if_in_field_initializer_list, $.preproc_if),
+        alias($.preproc_ifdef_in_field_initializer_list, $.preproc_ifdef),
+      )),
+      $.field_initializer,
+      repeat(choice(
+        seq(',', $.field_initializer),
+        alias($.preproc_if_in_field_initializer_list_leading_comma, $.preproc_if),
+        alias($.preproc_ifdef_in_field_initializer_list_leading_comma, $.preproc_ifdef),
+      )),
     ),
+
+    ...preprocIf('_in_field_initializer_list', $ => seq($.field_initializer, ',')),
+    ...preprocIf('_in_field_initializer_list_leading_comma', $ => seq(',', $.field_initializer)),
 
     field_initializer: $ => prec(1, seq(
       choice(

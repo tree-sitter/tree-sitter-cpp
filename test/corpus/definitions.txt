@@ -317,3 +317,68 @@ T::operator int() try { throw 1; } catch (...) { return 2; }
         (compound_statement
           (return_statement
             (number_literal)))))))
+
+================================================================================
+Constructor initializers under preprocessor conditionals
+================================================================================
+
+Bar::Bar()
+    : baz(true)
+#ifdef TRIGGER_ERROR
+    , qux(false)
+#endif
+{
+}
+
+Limiter::Limiter(int n)
+    :
+#if !defined(NDEBUG)
+      max_(n),
+#endif
+      allowed_(n) {
+}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    (function_declarator
+      (qualified_identifier
+        (namespace_identifier)
+        (identifier))
+      (parameter_list))
+    (field_initializer_list
+      (field_initializer
+        (field_identifier)
+        (argument_list
+          (true)))
+      (preproc_ifdef
+        (identifier)
+        (field_initializer
+          (field_identifier)
+          (argument_list
+            (false)))))
+    (compound_statement))
+  (function_definition
+    (function_declarator
+      (qualified_identifier
+        (namespace_identifier)
+        (identifier))
+      (parameter_list
+        (parameter_declaration
+          (primitive_type)
+          (identifier))))
+    (field_initializer_list
+      (preproc_if
+        (unary_expression
+          (preproc_defined
+            (identifier)))
+        (field_initializer
+          (field_identifier)
+          (argument_list
+            (identifier))))
+      (field_initializer
+        (field_identifier)
+        (argument_list
+          (identifier))))
+    (compound_statement)))
