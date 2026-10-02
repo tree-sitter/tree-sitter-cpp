@@ -63,13 +63,18 @@ module.exports = grammar(C, {
   ],
 
   conflicts: $ => [
+    [$._type_declarator, $.template_type],
+    [$._string, $.delete_method_clause],
+    [$.binary_expression, $.cast_expression],
+    [$._declaration_modifiers, $.friend_declaration],
+    [$._declaration_modifiers, $.friend_declaration, $.using_declaration],
+    [$.type_specifier, $._top_level_expression_statement],
     // C
     [$.type_specifier, $._declarator],
     [$.type_specifier, $.expression],
     [$.sized_type_specifier],
     [$.attributed_statement],
     [$._declaration_modifiers, $.attributed_statement],
-    [$._declaration_modifiers, $.using_declaration],
     [$._declaration_modifiers, $.attributed_statement, $.using_declaration],
     [$._top_level_item, $._top_level_statement],
     [$._block_item, $.statement],
@@ -195,6 +200,7 @@ module.exports = grammar(C, {
       $.enum_specifier,
       $.class_specifier,
       $.sized_type_specifier,
+      alias($.pack_index_expression, $.pack_index_type),
       $.primitive_type,
       $.template_type,
       $.dependent_type,
@@ -277,7 +283,12 @@ module.exports = grammar(C, {
       members: original.members.map(
         (e) => e.name !== 'body' ?
           e :
-          field('body', choice(e.content, $.try_statement))),
+          // `void f(int) = delete;` and `A::A() = default;` outside a class
+          choice(
+            field('body', choice(e.content, $.try_statement)),
+            prec.dynamic(1, $.default_method_clause),
+            prec.dynamic(1, $.delete_method_clause),
+          )),
     }),
 
     declaration: $ => seq(
@@ -430,10 +441,21 @@ module.exports = grammar(C, {
     template_instantiation: $ => prec(1, seq(
       optional('extern'),
       'template',
-      optional($._declaration_specifiers),
-      field('declarator', $._declarator),
+      choice(
+        seq(
+          optional($._declaration_specifiers),
+          field('declarator', $._declarator),
+        ),
+        // `template class Ring<int, 4>;` names a class and declares nothing
+        $._class_name_specifier_for_instantiation,
+      ),
       ';',
     )),
+
+    _class_name_specifier_for_instantiation: $ => seq(
+      choice('class', 'struct', 'union'),
+      field('name', $._class_name),
+    ),
 
     template_parameter_list: $ => seq(
       '<',
@@ -651,10 +673,12 @@ module.exports = grammar(C, {
     ),
 
     default_method_clause: _ => seq('=', 'default', ';'),
-    delete_method_clause: _ => seq('=', 'delete', ';'),
+    // C++26: = delete("reason")
+    delete_method_clause: $ => seq('=', 'delete', optional(seq('(', $.string_literal, ')')), ';'),
     pure_virtual_clause: _ => seq('=', /0/, ';'),
 
     friend_declaration: $ => seq(
+      repeat($.attribute_declaration),
       optional('constexpr'),
       'friend',
       choice(
@@ -705,12 +729,34 @@ module.exports = grammar(C, {
     ),
 
     reference_declarator: $ => prec.dynamic(1, prec.right(seq(choice('&', '&&'), $._declarator))),
+    // pointer to member: `int Widget::* p`, `int (Widget::*fn)() const`
+    pointer_type_declarator: ($, original) => choice(
+      original,
+      prec.dynamic(1, prec.right(seq(
+        field('scope', choice($._namespace_identifier, $.template_type)),
+        '::',
+        '*',
+        repeat($.type_qualifier),
+        field('declarator', $._type_declarator),
+      ))),
+    ),
+    pointer_field_declarator: ($, original) => choice(
+      original,
+      prec.dynamic(1, prec.right(seq(
+        field('scope', choice($._namespace_identifier, $.template_type)),
+        '::',
+        '*',
+        repeat($.type_qualifier),
+        field('declarator', $._field_declarator),
+      ))),
+    ),
+
     reference_field_declarator: $ => prec.dynamic(1, prec.right(seq(choice('&', '&&'), $._field_declarator))),
     reference_type_declarator: $ => prec.dynamic(1, prec.right(seq(choice('&', '&&'), $._type_declarator))),
     abstract_reference_declarator: $ => prec.right(seq(choice('&', '&&'), optional($._abstract_declarator))),
 
     structured_binding_declarator: $ => prec.dynamic(PREC.STRUCTURED_BINDING, seq(
-      '[', commaSep1($.identifier), ']',
+      '[', commaSep1(seq($.identifier, repeat($.attribute_declaration))), ']',
     )),
 
     ref_qualifier: _ => choice('&', '&&'),
@@ -746,7 +792,18 @@ module.exports = grammar(C, {
     _function_postfix: $ => prec.right(choice(
       repeat1($.virtual_specifier),
       $.requires_clause,
+      repeat1($.contract_specifier),
     )),
+
+    // C++26 contracts: pre(x > 0), post(r: r > 0)
+    contract_specifier: $ => seq(
+      choice('pre', 'post'),
+      repeat($.attribute_declaration),
+      '(',
+      optional(seq(field('result', $.identifier), ':')),
+      field('condition', $.expression),
+      ')',
+    ),
 
     function_declarator: $ => prec.dynamic(1, seq(
       field('declarator', $._declarator),
@@ -930,9 +987,19 @@ module.exports = grammar(C, {
 
     if_statement: $ => prec.right(seq(
       'if',
-      optional('constexpr'),
-      field('condition', $.condition_clause),
-      field('consequence', $.statement),
+      choice(
+        seq(
+          optional('constexpr'),
+          field('condition', $.condition_clause),
+          field('consequence', $.statement),
+        ),
+        // C++23: if consteval { … } / if !consteval { … }
+        seq(
+          optional('!'),
+          'consteval',
+          field('consequence', $.compound_statement),
+        ),
+      ),
       optional(field('alternative', $.else_clause)),
     )),
 
@@ -1038,6 +1105,7 @@ module.exports = grammar(C, {
       $.delete_expression,
       $.lambda_expression,
       $.parameter_pack_expansion,
+      $.pack_index_expression,
       $.this,
       $.user_defined_literal,
       $.fold_expression,
@@ -1321,6 +1389,16 @@ module.exports = grammar(C, {
       '...',
     )),
 
+    // C++26 pack indexing: Ts...[0], args...[i]
+    // `...[` is one token: before C++26 it could not appear, so it cannot be mistaken for a pack
+    // expansion followed by a subscript.
+    pack_index_expression: $ => seq(
+      field('pack', $.identifier),
+      alias(token(seq('...', /\s*/, '[')), '...['),
+      field('index', $.expression),
+      ']',
+    ),
+
     type_parameter_pack_expansion: $ => seq(
       field('pattern', $.type_descriptor),
       '...',
@@ -1358,6 +1436,8 @@ module.exports = grammar(C, {
         ['xor', PREC.EXCLUSIVE_OR],
         ['bitand', PREC.BITWISE_AND],
         ['not_eq', PREC.EQUAL],
+        // pointer-to-member through a pointer: binds tighter than *, looser than unary
+        ['->*', PREC.MULTIPLY + 1],
       ];
 
       return choice(
