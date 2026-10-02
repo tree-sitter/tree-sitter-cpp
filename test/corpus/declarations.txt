@@ -2140,22 +2140,21 @@ struct A {
               (abstract_reference_declarator))))
         (default_method_clause))
       (friend_declaration
-        (declaration
+        (function_definition
           (placeholder_type_specifier
             (auto))
-          (init_declarator
-            (function_declarator
-              (operator_name)
-              (parameter_list
-                (parameter_declaration
-                  (type_identifier)
-                  (type_qualifier)
-                  (abstract_reference_declarator))
-                (parameter_declaration
-                  (type_identifier)
-                  (type_qualifier)
-                  (abstract_reference_declarator))))
-            (identifier)))))))
+          (function_declarator
+            (operator_name)
+            (parameter_list
+              (parameter_declaration
+                (type_identifier)
+                (type_qualifier)
+                (abstract_reference_declarator))
+              (parameter_declaration
+                (type_identifier)
+                (type_qualifier)
+                (abstract_reference_declarator))))
+          (default_method_clause))))))
 
 ================================================================================
 Pointers in qualified identifiers and field expressions

@@ -1,0 +1,301 @@
+================================================================================
+Deducing this
+================================================================================
+
+struct S { void f(this S const& self) {} };
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (struct_specifier
+    (type_identifier)
+    (field_declaration_list
+      (function_definition
+        (primitive_type)
+        (function_declarator
+          (field_identifier)
+          (parameter_list
+            (explicit_object_parameter_declaration
+              (this)
+              (parameter_declaration
+                (type_identifier)
+                (type_qualifier)
+                (reference_declarator
+                  (identifier))))))
+        (compound_statement)))))
+
+================================================================================
+If consteval
+================================================================================
+
+constexpr int f() { if consteval { return 1; } else { return 2; } }
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    (type_qualifier)
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list))
+    (compound_statement
+      (if_statement
+        (compound_statement
+          (return_statement
+            (number_literal)))
+        (else_clause
+          (compound_statement
+            (return_statement
+              (number_literal))))))))
+
+================================================================================
+If not consteval
+================================================================================
+
+constexpr int f() { if !consteval { return 1; } return 2; }
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    (type_qualifier)
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list))
+    (compound_statement
+      (if_statement
+        (compound_statement
+          (return_statement
+            (number_literal))))
+      (return_statement
+        (number_literal)))))
+
+================================================================================
+Pack indexing
+================================================================================
+
+template <typename... Ts> using First = Ts...[0];
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (template_declaration
+    (template_parameter_list
+      (variadic_type_parameter_declaration
+        (type_identifier)))
+    (alias_declaration
+      (type_identifier)
+      (type_descriptor
+        (pack_index_type
+          (identifier)
+          (number_literal))))))
+
+================================================================================
+Deleted reason
+================================================================================
+
+void f() = delete("use g");
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list))
+    (delete_method_clause
+      (string_literal
+        (string_content)))))
+
+================================================================================
+Contracts
+================================================================================
+
+int f(int x) pre(x > 0) post(r: r > 0);
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (declaration
+    (primitive_type)
+    (function_declarator
+      (identifier)
+      (parameter_list
+        (parameter_declaration
+          (primitive_type)
+          (identifier)))
+      (contract_specifier
+        (binary_expression
+          (identifier)
+          (number_literal)))
+      (contract_specifier
+        (identifier)
+        (binary_expression
+          (identifier)
+          (number_literal))))))
+
+================================================================================
+Structured binding attr
+================================================================================
+
+auto [a [[maybe_unused]], b] = pair;
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (declaration
+    (placeholder_type_specifier
+      (auto))
+    (init_declarator
+      (structured_binding_declarator
+        (identifier)
+        (attribute_declaration
+          (attribute
+            (identifier)))
+        (identifier))
+      (identifier))))
+
+================================================================================
+Explicit instantiation
+================================================================================
+
+template class Ring<int, 4>;
+extern template class Ring<long, 4>;
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (template_instantiation
+    (template_type
+      (type_identifier)
+      (template_argument_list
+        (type_descriptor
+          (primitive_type))
+        (number_literal))))
+  (template_instantiation
+    (template_type
+      (type_identifier)
+      (template_argument_list
+        (type_descriptor
+          (sized_type_specifier))
+        (number_literal)))))
+
+================================================================================
+Friend attr
+================================================================================
+
+struct S { [[maybe_unused]] friend void f(); };
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (struct_specifier
+    (type_identifier)
+    (field_declaration_list
+      (friend_declaration
+        (attribute_declaration
+          (attribute
+            (identifier)))
+        (declaration
+          (primitive_type)
+          (function_declarator
+            (identifier)
+            (parameter_list)))))))
+
+================================================================================
+Deleted function with a reason
+================================================================================
+
+struct S {
+  S(const S &) = delete("not copyable");
+  void g() = delete;
+};
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (struct_specifier
+    name: (type_identifier)
+    body: (field_declaration_list
+      (function_definition
+        declarator: (function_declarator
+          declarator: (identifier)
+          parameters: (parameter_list
+            (parameter_declaration
+              (type_qualifier)
+              type: (type_identifier)
+              declarator: (abstract_reference_declarator))))
+        (delete_method_clause
+          (string_literal
+            (string_content))))
+      (function_definition
+        type: (primitive_type)
+        declarator: (function_declarator
+          declarator: (field_identifier)
+          parameters: (parameter_list))
+        (delete_method_clause)))))
+
+================================================================================
+Pointer to member declarators and operators
+================================================================================
+
+struct S {
+  int Widget::* field;
+  int (Widget::*method)() const = &Widget::get;
+};
+typedef int Widget::* MemberPtr;
+int f(Widget *p, MemberPtr m) {
+  return p->*m * 2;
+}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (struct_specifier
+    name: (type_identifier)
+    body: (field_declaration_list
+      (field_declaration
+        type: (primitive_type)
+        declarator: (pointer_declarator
+          scope: (namespace_identifier)
+          declarator: (field_identifier)))
+      (field_declaration
+        type: (primitive_type)
+        declarator: (function_declarator
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              scope: (namespace_identifier)
+              declarator: (field_identifier)))
+          parameters: (parameter_list)
+          (type_qualifier))
+        default_value: (pointer_expression
+          argument: (qualified_identifier
+            scope: (namespace_identifier)
+            name: (identifier))))))
+  (type_definition
+    type: (primitive_type)
+    declarator: (pointer_declarator
+      scope: (namespace_identifier)
+      declarator: (type_identifier)))
+  (function_definition
+    type: (primitive_type)
+    declarator: (function_declarator
+      declarator: (identifier)
+      parameters: (parameter_list
+        (parameter_declaration
+          type: (type_identifier)
+          declarator: (pointer_declarator
+            declarator: (identifier)))
+        (parameter_declaration
+          type: (type_identifier)
+          declarator: (identifier))))
+    body: (compound_statement
+      (return_statement
+        (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          right: (number_literal))))))
