@@ -1162,7 +1162,7 @@ module.exports = grammar(C, {
     ),
 
     _requirement_clause_constraint: $ => choice(
-      // Primary expressions"
+      // Primary expressions
       $.true,
       $.false,
       $._class_name,
