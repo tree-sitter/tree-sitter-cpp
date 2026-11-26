@@ -6889,6 +6889,15 @@
                     {
                       "type": "SYMBOL",
                       "name": "comma_expression"
+                    },
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "condition_declaration"
+                      },
+                      "named": true,
+                      "value": "declaration"
                     }
                   ]
                 },
