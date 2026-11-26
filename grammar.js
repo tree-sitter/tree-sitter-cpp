@@ -939,7 +939,21 @@ module.exports = grammar(C, {
     // Using prec(1) instead of prec.dynamic(1) causes issues with the
     // range loop's declaration specifiers if `int` is passed in, it'll
     // always prefer the standard for loop and give us a parse error.
-    _for_statement_body: ($, original) => prec.dynamic(1, original),
+    //
+    // The condition can declare a variable, as in `if`, `switch` and `while`.
+    _for_statement_body: $ => prec.dynamic(1, seq(
+      choice(
+        field('initializer', $.declaration),
+        seq(field('initializer', optional(choice($.expression, $.comma_expression))), ';'),
+      ),
+      field('condition', optional(choice(
+        $.expression,
+        $.comma_expression,
+        alias($.condition_declaration, $.declaration),
+      ))),
+      ';',
+      field('update', optional(choice($.expression, $.comma_expression))),
+    )),
     for_range_loop: $ => seq(
       'for',
       '(',
