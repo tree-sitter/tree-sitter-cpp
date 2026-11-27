@@ -247,6 +247,63 @@ void f() {
         consequence: (compound_statement)))))
 
 ================================================================================
+For loops with declarations
+================================================================================
+
+void f() {
+  for (int i = 0; auto *p = at(i); ++i) { }
+  for (; const int x { foo() }; ) { }
+  for (; Node *n = next(); ) { }
+}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    type: (primitive_type)
+    declarator: (function_declarator
+      declarator: (identifier)
+      parameters: (parameter_list))
+    body: (compound_statement
+      (for_statement
+        initializer: (declaration
+          type: (primitive_type)
+          declarator: (init_declarator
+            declarator: (identifier)
+            value: (number_literal)))
+        condition: (declaration
+          type: (placeholder_type_specifier
+            (auto))
+          declarator: (pointer_declarator
+            declarator: (identifier))
+          value: (call_expression
+            function: (identifier)
+            arguments: (argument_list
+              (identifier))))
+        update: (update_expression
+          argument: (identifier))
+        body: (compound_statement))
+      (for_statement
+        condition: (declaration
+          (type_qualifier)
+          type: (primitive_type)
+          declarator: (identifier)
+          value: (initializer_list
+            (call_expression
+              function: (identifier)
+              arguments: (argument_list))))
+        body: (compound_statement))
+      (for_statement
+        condition: (declaration
+          type: (type_identifier)
+          declarator: (pointer_declarator
+            declarator: (identifier))
+          value: (call_expression
+            function: (identifier)
+            arguments: (argument_list)))
+        body: (compound_statement)))))
+
+================================================================================
 Try/catch statements
 ================================================================================
 
